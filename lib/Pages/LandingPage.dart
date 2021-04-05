@@ -60,7 +60,7 @@ class _LandingPageState extends State<LandingPage> {
                     decoration: InputDecoration(
                       counterText: '',
                       prefix: Text(
-                        '+91 ',
+                        ' +91 ',
                         style: TextStyle(
                             fontSize: 20,
                             color: AppColors.greenColor,
