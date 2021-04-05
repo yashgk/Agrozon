@@ -1,6 +1,8 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/AppConstants/AppString.dart';
+import 'package:agrozon/Pages/HomeScreen.dart';
+import 'package:agrozon/Pages/OtpValidate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,7 +27,7 @@ class _LandingPageState extends State<LandingPage> {
           children: [
             Container(
               padding: EdgeInsets.all(15),
-              height: MediaQuery.of(context).size.height * 0.35,
+              height: MediaQuery.of(context).size.height * 0.32,
               width: MediaQuery.of(context).size.width * 0.9,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -101,7 +103,12 @@ class _LandingPageState extends State<LandingPage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OtpValidate()));
+                      },
                       child: Text(
                         AppString.submitBtn,
                         style: TextStyle(

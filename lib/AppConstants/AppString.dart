@@ -5,4 +5,6 @@ class AppString {
   static final String submitBtn = 'SUBMIT';
   static final String googleSigninBtn = 'Sign in with Google';
   static final String facebookSigninBtn = 'Sign in with Facebook';
+  static final String otpLable = "Enter OTP";
+  static final String otpSubmitBtnText = "Let's go!";
 }
