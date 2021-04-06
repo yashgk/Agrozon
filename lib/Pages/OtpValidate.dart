@@ -15,19 +15,20 @@ class _OtpValidateState extends State<OtpValidate> {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(20),
-        color: AppColors.greenColor,
+        color: AppColors.whiteColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               AppString.otpLable,
               style: TextStyle(
-                  color: AppColors.whiteColor,
+                  color: AppColors.greenColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 30),
             ),
             AppConstant.sizer(context: context, h: 0.03, w: 0.0),
             TextField(
+              showCursor: false,
               keyboardType: TextInputType.phone,
               maxLength: 6,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -38,29 +39,29 @@ class _OtpValidateState extends State<OtpValidate> {
                 hintStyle: TextStyle(
                     fontSize: 20,
                     letterSpacing: 36,
-                    color: AppColors.whiteColor,
+                    color: AppColors.greenColor,
                     fontWeight: FontWeight.w700),
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: AppColors.whiteColor,
+                    color: AppColors.greenColor,
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: AppColors.whiteColor,
+                    color: AppColors.greenColor,
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: AppColors.whiteColor,
+                    color: AppColors.greenColor,
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: AppColors.whiteColor,
+                    color: AppColors.greenColor,
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -69,7 +70,7 @@ class _OtpValidateState extends State<OtpValidate> {
               style: TextStyle(
                   letterSpacing: 36.0,
                   fontSize: 22,
-                  color: AppColors.whiteColor,
+                  color: AppColors.greenColor,
                   fontWeight: FontWeight.w700),
             ),
           ],

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../AppConstants/AppColors.dart';
+
 class LandingPage extends StatefulWidget {
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -21,7 +23,7 @@ class _LandingPageState extends State<LandingPage> {
         padding: EdgeInsets.all(10),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: AppColors.greenColor,
+        color: AppColors.whiteColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -31,7 +33,7 @@ class _LandingPageState extends State<LandingPage> {
               width: MediaQuery.of(context).size.width * 0.9,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: AppColors.whiteColor,
+                color: AppColors.greenColor,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -48,7 +50,7 @@ class _LandingPageState extends State<LandingPage> {
                     AppString.loginMsg,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: AppColors.greenColor,
+                      color: AppColors.whiteColor,
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
@@ -58,37 +60,37 @@ class _LandingPageState extends State<LandingPage> {
                     keyboardType: TextInputType.phone,
                     maxLength: 10,
                     maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                    cursorColor: AppColors.greenColor,
+                    cursorColor: AppColors.whiteColor,
                     decoration: InputDecoration(
                       counterText: '',
                       prefix: Text(
                         ' +91 ',
                         style: TextStyle(
                             fontSize: 20,
-                            color: AppColors.greenColor,
+                            color: AppColors.whiteColor,
                             fontWeight: FontWeight.w700),
                       ),
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: AppColors.greenColor,
+                          color: AppColors.whiteColor,
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       disabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: AppColors.greenColor,
+                          color: AppColors.whiteColor,
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: AppColors.greenColor,
+                          color: AppColors.whiteColor,
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: AppColors.greenColor,
+                          color: AppColors.whiteColor,
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -96,7 +98,7 @@ class _LandingPageState extends State<LandingPage> {
                     style: TextStyle(
                         letterSpacing: 2.0,
                         fontSize: 20,
-                        color: AppColors.greenColor,
+                        color: AppColors.whiteColor,
                         fontWeight: FontWeight.w700),
                   ),
                   AppConstant.sizer(context: context, h: 0.01, w: 0.0),
@@ -112,12 +114,13 @@ class _LandingPageState extends State<LandingPage> {
                       child: Text(
                         AppString.submitBtn,
                         style: TextStyle(
+                            color: AppColors.greenColor,
                             letterSpacing: 2.0,
                             fontWeight: FontWeight.bold,
                             fontSize: 16),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: AppColors.greenColor,
+                        primary: AppColors.whiteColor,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12)),
                       ),
