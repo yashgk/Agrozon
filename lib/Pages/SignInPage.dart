@@ -5,7 +5,6 @@ import 'package:agrozon/Pages/OtpValidate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../AppConstants/AppColors.dart';
 
 class SignInPage extends StatefulWidget {
@@ -109,17 +108,19 @@ class _SignInPageState extends State<SignInPage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         String phoneNumber =
                             "+91" + phoneController.text.trim();
                         print(phoneNumber);
                         if (phoneNumber.length == 13) {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OtpValidate(
-                                        phoneNumber: phoneNumber,
-                                      )));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OtpValidate(
+                                phoneNumber: phoneNumber,
+                              ),
+                            ),
+                          );
                         }
                       },
                       child: Text(
