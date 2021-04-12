@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class OtpValidate extends StatefulWidget {
+  final String phoneNumber;
+  OtpValidate({@required this.phoneNumber});
   @override
   _OtpValidateState createState() => _OtpValidateState();
 }
 
 class _OtpValidateState extends State<OtpValidate> {
+  TextEditingController otpController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +75,23 @@ class _OtpValidateState extends State<OtpValidate> {
                   fontSize: 22,
                   color: AppColors.greenColor,
                   fontWeight: FontWeight.w700),
+            ),
+            AppConstant.sizer(context: context, h: 0.02, w: 0.0),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text(
+                AppString.submitBtn,
+                style: TextStyle(
+                    color: AppColors.whiteColor,
+                    letterSpacing: 2.0,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: AppColors.greenColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
             ),
           ],
         ),
