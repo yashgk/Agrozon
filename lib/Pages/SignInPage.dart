@@ -1,7 +1,10 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/AppConstants/AppString.dart';
+import 'package:agrozon/Core/AuthBase.dart';
+import 'package:agrozon/Pages/HomePage.dart';
 import 'package:agrozon/Pages/OtpValidate.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,6 +17,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   TextEditingController phoneController = TextEditingController();
+  Auth auth;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,7 +149,20 @@ class _SignInPageState extends State<SignInPage> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  UserCredential cred = await auth.signInWithGoogle();
+                  if (cred.user != null) {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                        (route) => false);
+                  } else {
+                    SnackBar snackBar = SnackBar(
+                        content:
+                            Text('Something went wrong. Please Try again.'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

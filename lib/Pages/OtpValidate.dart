@@ -1,6 +1,7 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/AppConstants/AppString.dart';
+import 'package:agrozon/Core/AuthBase.dart';
 import 'package:agrozon/Model/UserModel.dart';
 import 'package:agrozon/Pages/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,72 +18,49 @@ class OtpValidate extends StatefulWidget {
 class _OtpValidateState extends State<OtpValidate> {
   TextEditingController otpController = TextEditingController();
   FirebaseAuth firebaseAuth;
+  Auth auth;
   AppUser finaluser;
-  Future<User> signInWithPhone(String phoneNumber, BuildContext context) async {
+  String _verificationId;
+
+  Future<void> signInWithPhone(BuildContext context) async {
     firebaseAuth = FirebaseAuth.instance;
     await firebaseAuth.verifyPhoneNumber(
       timeout: Duration(seconds: 15),
-      phoneNumber: phoneNumber,
+      phoneNumber: widget.phoneNumber,
+      //on verification complete
       verificationCompleted: (PhoneAuthCredential credential) async {
-        print("verification success method ");
-        UserCredential userCredential =
-            await firebaseAuth.signInWithCredential(credential);
-        //finaluser.user = userCredential.user;
-        print(userCredential.user.uid);
-        if (userCredential.user != null) {
+        UserCredential cred = await auth.signInWithCred(credential);
+        finaluser.user = cred.user;
+        if (cred.user != null) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => HomePage()));
         }
       },
       verificationFailed: (FirebaseAuthException e) {
-        print("verification failed method ");
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                title: Text('Verification Failed'),
-                content: Text('Please try again...')));
+        SnackBar snackBar = SnackBar(content: Text('Invalid OTP'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       },
       codeSent: (String verificationId, int resendToken) async {
-        print(verificationId);
-        print("code sent method");
-        // String code = otpController.text;
-        // AuthCredential credential = PhoneAuthProvider.credential(
-        //     verificationId: verificationId, smsCode: code);
-        // UserCredential userCredential =
-        //     await firebaseAuth.signInWithCredential(credential);
-        // User user = userCredential.user;
-        // if (user != null) {
-        //   Navigator.pushReplacement(
-        //       context, MaterialPageRoute(builder: (context) => HomePage()));
-        // } else {
-        //   showDialog(
-        //       context: context,
-        //       builder: (context) => AlertDialog(
-        //           title: Text('Verification Failed'),
-        //           content: Text('Please try again...')));
-        // }
+        setState(() {
+          _verificationId = verificationId;
+        });
       },
       codeAutoRetrievalTimeout: (String verificationId) async {
-        print(verificationId);
-        print("code auto retrieval timeout method");
-        try {
-          String code = otpController.text;
-
-          AuthCredential credential = PhoneAuthProvider.credential(
-              verificationId: verificationId, smsCode: code);
-          UserCredential userCredential =
-              await firebaseAuth.signInWithCredential(credential);
-          finaluser.user = userCredential.user;
-        } catch (e) {
-          print(e.toString());
-        }
+        setState(() {
+          _verificationId = verificationId;
+        });
       },
     );
   }
 
   @override
+  void initState() {
+    signInWithPhone(context);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    signInWithPhone(widget.phoneNumber, context);
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(20),
@@ -99,6 +77,7 @@ class _OtpValidateState extends State<OtpValidate> {
             ),
             AppConstant.sizer(context: context, h: 0.03, w: 0.0),
             TextField(
+              controller: otpController,
               showCursor: false,
               keyboardType: TextInputType.phone,
               maxLength: 6,
@@ -146,16 +125,23 @@ class _OtpValidateState extends State<OtpValidate> {
             ),
             AppConstant.sizer(context: context, h: 0.02, w: 0.0),
             ElevatedButton(
-              onPressed: () {
-                if (finaluser.user.uid != null) {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                } else {
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                          title: Text('Verification Failed'),
-                          content: Text('Please enter correct otp...')));
+              onPressed: () async {
+                try {
+                  UserCredential cred = await auth.signInWithCred(
+                      PhoneAuthProvider.credential(
+                          verificationId: _verificationId,
+                          smsCode: otpController.text));
+
+                  if (cred.user != null) {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                        (route) => false);
+                  }
+                } catch (e) {
+                  print(e.toString());
+                  SnackBar snackBar = SnackBar(content: Text('Invalid OTP'));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
               },
               child: Text(

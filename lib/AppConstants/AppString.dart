@@ -1,4 +1,5 @@
 class AppString {
+  static final String appName = "Agrozon";
   static final String loginLable = 'Login';
   static final String loginMsg =
       'We will send an OTP on this number for verification.';

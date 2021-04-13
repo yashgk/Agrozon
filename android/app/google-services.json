@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "242592994117-8nv3b6u1uqeg2a21nki6atlnalqedbcf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.agrozon",
+            "certificate_hash": "b35c070bb3378e4abc10b6afa7472fb87ea6a9d7"
+          }
+        },
+        {
           "client_id": "242592994117-9a0h2i60eflicaobfroe7inccj26fu1q.apps.googleusercontent.com",
           "client_type": 3
         }
