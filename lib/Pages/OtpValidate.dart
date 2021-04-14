@@ -4,7 +4,7 @@ import 'package:agrozon/AppConstants/AppString.dart';
 import 'package:agrozon/Pages/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 
 class OtpValidate extends StatefulWidget {
   final String phoneNumber;
@@ -16,12 +16,10 @@ class OtpValidate extends StatefulWidget {
 class _OtpValidateState extends State<OtpValidate> {
   TextEditingController otpController = TextEditingController();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-
   String _verificationId;
-
   Future<void> signInWithPhone(BuildContext context) async {
     await firebaseAuth.verifyPhoneNumber(
-      timeout: Duration(seconds: 15),
+      timeout: Duration(seconds: 60),
       phoneNumber: widget.phoneNumber,
       //on verification complete
       verificationCompleted: (PhoneAuthCredential credential) async {
@@ -59,69 +57,44 @@ class _OtpValidateState extends State<OtpValidate> {
     super.initState();
   }
 
+  BoxDecoration get _pinPutDecoration {
+    return BoxDecoration(
+      border: Border.all(color: AppColors.whiteColor),
+      borderRadius: BorderRadius.circular(15.0),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(20),
-        color: AppColors.whiteColor,
+        color: AppColors.bgBlack,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               AppString.otpLable,
               style: TextStyle(
-                  color: AppColors.greenColor,
+                  color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 30),
             ),
             AppConstant.sizer(context: context, h: 0.03, w: 0.0),
-            TextField(
+            PinPut(
+              fieldsCount: 6,
+              textStyle: TextStyle(color: AppColors.whiteColor),
               controller: otpController,
-              showCursor: false,
-              keyboardType: TextInputType.phone,
-              maxLength: 6,
-              maxLengthEnforcement: MaxLengthEnforcement.enforced,
-              cursorColor: AppColors.greenColor,
-              decoration: InputDecoration(
-                counterText: '',
-                hintText: '------',
-                hintStyle: TextStyle(
-                    fontSize: 20,
-                    letterSpacing: 36,
-                    color: AppColors.greenColor,
-                    fontWeight: FontWeight.w700),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: AppColors.greenColor,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: AppColors.greenColor,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: AppColors.greenColor,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: AppColors.greenColor,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
+              submittedFieldDecoration: _pinPutDecoration.copyWith(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              selectedFieldDecoration: _pinPutDecoration,
+              followingFieldDecoration: _pinPutDecoration.copyWith(
+                borderRadius: BorderRadius.circular(5.0),
+                border: Border.all(
+                  color: AppColors.whiteColor.withOpacity(.5),
                 ),
               ),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  letterSpacing: 36.0,
-                  fontSize: 22,
-                  color: AppColors.greenColor,
-                  fontWeight: FontWeight.w700),
             ),
             AppConstant.sizer(context: context, h: 0.02, w: 0.0),
             ElevatedButton(
@@ -148,12 +121,11 @@ class _OtpValidateState extends State<OtpValidate> {
                 AppString.otpSubmitBtnText,
                 style: TextStyle(
                     color: AppColors.whiteColor,
-                    letterSpacing: 2.0,
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
               ),
               style: ElevatedButton.styleFrom(
-                primary: AppColors.greenColor,
+                primary: AppColors.secondaryColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
