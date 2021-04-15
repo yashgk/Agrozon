@@ -41,50 +41,51 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.all(15),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment.topRight,
-            colors: AppColors.gradientList,
-            radius: 0.7,
-          ),
-        ),
+        decoration: BoxDecoration(color: AppColors.bgBlack),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              padding: EdgeInsets.all(15),
-              height: MediaQuery.of(context).size.height * 0.32,
+              padding: EdgeInsets.all(10),
+              height: MediaQuery.of(context).size.height * 0.30,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: AppColors.bgWhite,
-              ),
+                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.bgWhite,
+                  boxShadow: [
+                    BoxShadow(
+                        color: AppColors.secondaryColor,
+                        offset: Offset(1.0, 1.0),
+                        spreadRadius: 0,
+                        blurRadius: 1),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     AppString.loginLable,
+                    textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: AppColors.whiteColor,
+                        color: AppColors.secondaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 30),
+                        fontSize: 18),
                   ),
-                  AppConstant.sizer(context: context, h: 0.01, w: 0.0),
+                  AppConstant.sizer(context: context, h: 0.012, w: 0.0),
                   Text(
                     AppString.loginMsg,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: AppColors.whiteColor,
+                      color: AppColors.secondaryColor,
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
                   ),
-                  AppConstant.sizer(context: context, h: 0.01, w: 0.0),
+                  AppConstant.sizer(context: context, h: 0.012, w: 0.0),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.60,
                     child: TextField(
@@ -93,7 +94,7 @@ class _SignInPageState extends State<SignInPage> {
                       maxLength: 10,
                       controller: phoneController,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      cursorColor: AppColors.whiteColor,
+                      cursorColor: AppColors.secondaryColor,
                       decoration: InputDecoration(
                         counterText: '',
                         prefixIcon: Padding(
@@ -102,31 +103,31 @@ class _SignInPageState extends State<SignInPage> {
                             ' +91 ',
                             style: TextStyle(
                                 fontSize: 20,
-                                color: AppColors.whiteColor,
+                                color: AppColors.secondaryColor,
                                 fontWeight: FontWeight.w700),
                           ),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: AppColors.whiteColor,
+                            color: AppColors.secondaryColor,
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         disabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: AppColors.whiteColor,
+                            color: AppColors.secondaryColor,
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: AppColors.whiteColor,
+                            color: AppColors.secondaryColor,
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: AppColors.whiteColor,
+                            color: AppColors.secondaryColor,
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -134,11 +135,11 @@ class _SignInPageState extends State<SignInPage> {
                       style: TextStyle(
                           letterSpacing: 2.0,
                           fontSize: 20,
-                          color: AppColors.whiteColor,
+                          color: AppColors.secondaryColor,
                           fontWeight: FontWeight.w700),
                     ),
                   ),
-                  AppConstant.sizer(context: context, h: 0.01, w: 0.0),
+                  AppConstant.sizer(context: context, h: 0.012, w: 0.0),
                   ElevatedButton(
                     onPressed: () async {
                       String phoneNumber = "+91" + phoneController.text.trim();
@@ -161,14 +162,14 @@ class _SignInPageState extends State<SignInPage> {
                     child: Text(
                       AppString.submitBtn,
                       style: TextStyle(
-                          color: AppColors.whiteColor,
-                       
+                          color: AppColors.bgBlack,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: AppColors.secondaryColor,
-                      elevation: 0.0,
+                      elevation: 5.0,
+                      shadowColor: AppColors.secondaryColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
@@ -180,8 +181,7 @@ class _SignInPageState extends State<SignInPage> {
             Text(
               'Or Sign In with',
               style: TextStyle(
-                  color: AppColors.whiteColor,
-                 
+                  color: AppColors.secondaryColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16),
             ),
@@ -214,8 +214,16 @@ class _SignInPageState extends State<SignInPage> {
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: AppColors.bgWhite),
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.bgWhite,
+                      boxShadow: [
+                        BoxShadow(
+                            color: AppColors.secondaryColor,
+                            offset: Offset(1.0, 1.0),
+                            spreadRadius: 0,
+                            blurRadius: 1),
+                      ],
+                    ),
                     width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height * 0.1,
                     child: Image.asset('assets/icons/google.png'),
@@ -246,8 +254,16 @@ class _SignInPageState extends State<SignInPage> {
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: AppColors.bgWhite),
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.bgWhite,
+                      boxShadow: [
+                        BoxShadow(
+                            color: AppColors.secondaryColor,
+                            offset: Offset(1.0, 1.0),
+                            spreadRadius: 0,
+                            blurRadius: 1),
+                      ],
+                    ),
                     width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height * 0.1,
                     child: Image.asset('assets/icons/facebook.png'),

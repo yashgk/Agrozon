@@ -1,7 +1,5 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppString.dart';
-import 'package:agrozon/Core/AuthBase.dart';
-import 'package:agrozon/Pages/LandingPage.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -286,22 +284,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.bgWhite,
+      centerTitle: true,
       title: Text(
         AppString.appName,
-        style: TextStyle(color: AppColors.whiteColor),
+        style: TextStyle(color: AppColors.secondaryColor),
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.settings_outlined),
-          onPressed: () async {
-            bool canLogout = await Auth.signOut();
-            if (canLogout) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => LandingPage()),
-                  (route) => false);
-            }
-          },
+          icon: Icon(
+            Icons.notifications,
+            color: AppColors.secondaryColor,
+          ),
+          onPressed: () {},
         )
       ],
     );

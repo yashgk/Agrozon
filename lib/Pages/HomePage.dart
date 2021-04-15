@@ -1,8 +1,7 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:agrozon/Pages/Screens/StorePage.dart';
-import 'package:agrozon/Pages/Screens/SettingPage.dart';
-import 'package:agrozon/Pages/Screens/ProfilePage.dart';
+import 'package:agrozon/Pages/Screens/AccountPage.dart';
 import 'package:agrozon/Pages/Screens/FavouritePage.dart';
 import 'package:agrozon/Pages/Screens/OrderPage.dart';
 import 'package:agrozon/CommonWidgets/CustomAppBar.dart';
@@ -17,10 +16,9 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> screenList = [
     StorePage(),
-    SettingPage(),
-    ProfilePage(),
-    FavouritePage(),
     OrderPage(),
+    FavouritePage(),
+    AccountPage(),
   ];
   void onItemTapped(int index) {
     setState(() {
@@ -31,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(),
       body: Container(
         child: screenList.elementAt(selectedIndex),
@@ -43,21 +42,17 @@ class _HomePageState extends State<HomePage> {
             activeIcon: Icon(Icons.store),
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shop_outlined),
+              icon: Icon(Icons.shopping_cart_outlined),
               label: 'Orders',
-              activeIcon: Icon(Icons.shop)),
+              activeIcon: Icon(Icons.shopping_cart)),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite_outline),
               label: 'Favourites',
               activeIcon: Icon(Icons.favorite)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              label: 'Settings',
-              activeIcon: Icon(Icons.settings)),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              label: 'Profile',
-              activeIcon: Icon(Icons.person)),
+              icon: Icon(Icons.account_circle_outlined),
+              label: 'Account',
+              activeIcon: Icon(Icons.account_circle)),
         ],
         currentIndex: selectedIndex,
         backgroundColor: AppColors.bgWhite,

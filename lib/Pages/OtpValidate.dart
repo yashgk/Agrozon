@@ -72,20 +72,23 @@ class _OtpValidateState extends State<OtpValidate> {
         color: AppColors.bgBlack,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               AppString.otpLable,
+              textAlign: TextAlign.left,
               style: TextStyle(
-                  color: AppColors.whiteColor,
+                  color: AppColors.secondaryColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 30),
+                  fontSize: 18),
             ),
             AppConstant.sizer(context: context, h: 0.03, w: 0.0),
             PinPut(
               fieldsCount: 6,
               textStyle: TextStyle(color: AppColors.whiteColor),
               controller: otpController,
-              submittedFieldDecoration: _pinPutDecoration.copyWith(
+              submittedFieldDecoration: BoxDecoration(
+                border: Border.all(color: AppColors.secondaryColor),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               selectedFieldDecoration: _pinPutDecoration,
@@ -97,37 +100,42 @@ class _OtpValidateState extends State<OtpValidate> {
               ),
             ),
             AppConstant.sizer(context: context, h: 0.02, w: 0.0),
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  UserCredential cred = await firebaseAuth.signInWithCredential(
-                      PhoneAuthProvider.credential(
-                          verificationId: _verificationId,
-                          smsCode: otpController.text));
+            SizedBox(
+              width: 50,
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    UserCredential cred = await firebaseAuth
+                        .signInWithCredential(PhoneAuthProvider.credential(
+                            verificationId: _verificationId,
+                            smsCode: otpController.text));
 
-                  if (cred.user != null) {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                        (route) => false);
+                    if (cred.user != null) {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                          (route) => false);
+                    }
+                  } catch (e) {
+                    print(e.toString());
+                    SnackBar snackBar = SnackBar(content: Text('Invalid OTP'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
-                } catch (e) {
-                  print(e.toString());
-                  SnackBar snackBar = SnackBar(content: Text('Invalid OTP'));
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-              child: Text(
-                AppString.otpSubmitBtnText,
-                style: TextStyle(
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: AppColors.secondaryColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                },
+                child: Text(
+                  AppString.otpSubmitBtnText,
+                  style: TextStyle(
+                      color: AppColors.bgBlack,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: AppColors.secondaryColor,
+                  elevation: 5.0,
+                  shadowColor: AppColors.secondaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
               ),
             ),
           ],
