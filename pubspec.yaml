@@ -34,6 +34,8 @@ dependencies:
   flutter_login_facebook: ^1.0.1
   pinput: ^1.2.0
   image_picker: ^0.7.4
+  firebase_database: ^6.1.2
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

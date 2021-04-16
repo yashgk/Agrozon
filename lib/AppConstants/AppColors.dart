@@ -15,4 +15,6 @@ class AppColors {
     Colors.orange[100],
     Colors.orange[200]
   ];
+  static final Color redColor = Colors.red;
+  static final Color yellowColor = Colors.yellow[300];
 }

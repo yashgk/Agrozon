@@ -1,5 +1,6 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
+import 'package:agrozon/Core/RealtimeDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:agrozon/CommonWidgets/CarouselTile.dart';
 
@@ -13,8 +14,8 @@ class _StorePageState extends State<StorePage> {
 
   @override
   Widget build(BuildContext context) {
+    RealtimeDatabase.getAllProducts();
     var size = MediaQuery.of(context).size;
-
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
     final double itemWidth = size.width / 2;
@@ -144,31 +145,11 @@ class ProductTile extends StatelessWidget {
         // width: 100,
         child: Column(
           children: [
-            Stack(children: [
-              InkWell(
-                onTap: () {
-                  SnackBar snackBar =
-                      SnackBar(content: Text('Added to Favourites.'));
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                },
-                child: Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              Image.asset(
-                imagePath,
-                height: 200,
-                width: 130,
-              ),
-            ]),
+            Image.asset(
+              imagePath,
+              height: 200,
+              width: 130,
+            ),
             AppConstant.sizer(context: context, h: 0.01, w: 0.0),
             Row(
               children: [
@@ -201,11 +182,46 @@ class ProductTile extends StatelessWidget {
                   style: TextStyle(
                       color: AppColors.whiteColor, fontWeight: FontWeight.bold),
                 ),
-                AppConstant.sizer(context: context, h: 0.0, w: 0.19),
+                AppConstant.sizer(context: context, h: 0.0, w: 0.08),
                 InkWell(
                   onTap: () {
-                    SnackBar snackBar =
-                        SnackBar(content: Text('Added to Kart.'));
+                    SnackBar snackBar = SnackBar(
+                      content: Text(
+                        'Added to Favourites.',
+                        style: TextStyle(
+                            color: AppColors.bgBlack,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      backgroundColor: AppColors.secondaryColor,
+                      duration: Duration(seconds: 2),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondaryColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.favorite,
+                      color: AppColors.bgBlack,
+                    ),
+                  ),
+                ),
+                AppConstant.sizer(context: context, h: 0.0, w: 0.02),
+                InkWell(
+                  onTap: () {
+                    SnackBar snackBar = SnackBar(
+                      content: Text(
+                        'Added to Kart.',
+                        style: TextStyle(
+                            color: AppColors.bgBlack,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      backgroundColor: AppColors.secondaryColor,
+                      duration: Duration(seconds: 2),
+                    );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   child: Container(

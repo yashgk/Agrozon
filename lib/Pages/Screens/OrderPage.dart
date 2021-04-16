@@ -6,6 +6,18 @@ class OrderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(color: AppColors.bgBlack),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ExpansionPanelList(
+            children: [
+              // ExpansionPanel(headerBuilder: headerBuilder, body: body),
+              // ExpansionPanel(headerBuilder: headerBuilder, body: body),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

@@ -10,4 +10,8 @@ class AppString {
 
   //Crousal String Names
   static final String seed = 'Seeds';
+
+
+  //Profile Page
+  
 }

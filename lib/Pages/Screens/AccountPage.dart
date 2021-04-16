@@ -2,6 +2,8 @@ import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/Core/AuthBase.dart';
 import 'package:agrozon/Pages/LandingPage.dart';
+import 'package:agrozon/Pages/Screens/ProfilePage.dart';
+import 'package:agrozon/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:agrozon/CommonWidgets/CustomListTile.dart';
 
@@ -50,7 +52,7 @@ class AccountPage extends StatelessWidget {
                 AppConstant.sizer(context: context, h: 0.0, w: 0.1),
                 Container(
                   child: Text(
-                    'Jhon Deo',
+                    user?.uid ?? "jhon Deo",
                     style: TextStyle(
                         fontSize: 25,
                         color: AppColors.secondaryColor,
@@ -64,7 +66,10 @@ class AccountPage extends StatelessWidget {
           CustomListTile(
             leading: Icons.person_outline,
             title: 'Profile',
-            onListItemTap: () {},
+            onListItemTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()));
+            },
           ),
           AppConstant.sizer(context: context, w: 0.0, h: 0.01),
           CustomListTile(

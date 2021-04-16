@@ -1,25 +1,16 @@
 import 'package:agrozon/Model/UserModel.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class UserProvider extends ChangeNotifier {
-  AppUser appUser;
+  AppUser _appUser;
 
-  Future<User> getUser() async {
-    if (appUser.user != null) {
-      print(appUser.user.uid);
-      return appUser.user;
-    } else {
-      return null;
-    }
-  }
-
-  void setUser(User finaluser) {
-    appUser.user = finaluser;
+  set userDetails(AppUser value) {
+    _appUser = value;
     notifyListeners();
   }
 
-  void removeUser() {
-    appUser.user = null;
+  AppUser get fetchUserDetails => _appUser;
+  AppUser getUser() {
+    return _appUser;
   }
 }

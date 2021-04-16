@@ -3,12 +3,16 @@ import 'dart:ui';
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/AppConstants/AppString.dart';
+import 'package:agrozon/Model/UserModel.dart';
 import 'package:agrozon/Pages/HomePage.dart';
 import 'package:agrozon/Pages/OtpValidate.dart';
+import 'package:agrozon/Providers/UserProvider.dart';
+import 'package:agrozon/global_variables.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:agrozon/Core/AuthBase.dart';
+import 'package:provider/provider.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -18,6 +22,9 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   TextEditingController phoneController = TextEditingController();
   bool connected;
+  UserProvider userProvider;
+  AppUser appUser;
+
   void checkConnectivity() async {
     try {
       final result = await InternetAddress.lookup('www.google.com');
@@ -40,6 +47,7 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -107,30 +115,10 @@ class _SignInPageState extends State<SignInPage> {
                                 fontWeight: FontWeight.w700),
                           ),
                         ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors.secondaryColor,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors.secondaryColor,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors.secondaryColor,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors.secondaryColor,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        border: textFieldBorder,
+                        disabledBorder: textFieldBorder,
+                        enabledBorder: textFieldBorder,
+                        focusedBorder: textFieldBorder,
                       ),
                       style: TextStyle(
                           letterSpacing: 2.0,
@@ -155,7 +143,15 @@ class _SignInPageState extends State<SignInPage> {
                         );
                       } else {
                         SnackBar snackBar = SnackBar(
-                            content: Text('Please Enter Valid Phone Number.'));
+                          content: Text(
+                            'Please Enter Valid Phone Number.',
+                            style: TextStyle(
+                                color: AppColors.bgBlack,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          backgroundColor: AppColors.redColor,
+                          duration: Duration(seconds: 2),
+                        );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                     },
@@ -195,19 +191,44 @@ class _SignInPageState extends State<SignInPage> {
                     if (connected == true) {
                       User cred = await Auth.signInWithGoogle();
                       if (cred != null) {
+                        print("uid set");
+                        print(cred.uid);
+                        user = cred;
+
+                        userProvider.userDetails = AppUser(
+                            email: cred.email ?? "",
+                            fullName: cred.displayName ?? "",
+                            mobile: cred.phoneNumber ?? "",
+                            uid: cred.uid);
+
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => HomePage()),
                             (route) => false);
                       } else {
                         SnackBar snackBar = SnackBar(
-                            content: Text(
-                                'Something went wrong. Please Try again.'));
+                          content: Text(
+                            'Something Went Wrong. Please Try Again.',
+                            style: TextStyle(
+                                color: AppColors.bgBlack,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          backgroundColor: AppColors.redColor,
+                          duration: Duration(seconds: 2),
+                        );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                     } else {
                       SnackBar snackBar = SnackBar(
-                          content: Text('Please connect to Internet.'));
+                        content: Text(
+                          'Please Connect to the Internet.',
+                          style: TextStyle(
+                              color: AppColors.bgBlack,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        backgroundColor: AppColors.yellowColor,
+                        duration: Duration(seconds: 2),
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   },
@@ -235,19 +256,40 @@ class _SignInPageState extends State<SignInPage> {
                     if (connected) {
                       User cred = await Auth.signInWithFacebook();
                       if (cred != null) {
+                        user = cred;
+                        userProvider.userDetails = AppUser(
+                            email: cred.email ?? "",
+                            fullName: cred.displayName ?? "",
+                            mobile: cred.phoneNumber ?? "",
+                            uid: cred.uid);
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => HomePage()),
                             (route) => false);
                       } else {
                         SnackBar snackBar = SnackBar(
-                            content: Text(
-                                'Something went wrong. Please Try again.'));
+                          content: Text(
+                            'Something Went Wrong. Please Try Again.',
+                            style: TextStyle(
+                                color: AppColors.bgBlack,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          backgroundColor: AppColors.redColor,
+                          duration: Duration(seconds: 2),
+                        );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                     } else {
                       SnackBar snackBar = SnackBar(
-                          content: Text('Please connect to Internet.'));
+                        content: Text(
+                          'Please Connect to the Internet.',
+                          style: TextStyle(
+                              color: AppColors.bgBlack,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        backgroundColor: AppColors.yellowColor,
+                        duration: Duration(seconds: 2),
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   },
