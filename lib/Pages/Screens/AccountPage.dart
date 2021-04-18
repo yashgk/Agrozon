@@ -3,13 +3,16 @@ import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/Core/AuthBase.dart';
 import 'package:agrozon/Pages/LandingPage.dart';
 import 'package:agrozon/Pages/Screens/ProfilePage.dart';
-import 'package:agrozon/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:agrozon/CommonWidgets/CustomListTile.dart';
+import 'package:provider/provider.dart';
+import 'package:agrozon/Providers/UserProvider.dart';
 
 class AccountPage extends StatelessWidget {
+  UserProvider userProvider;
   @override
   Widget build(BuildContext context) {
+    userProvider = Provider.of<UserProvider>(context);
     return Container(
       padding: EdgeInsets.all(10),
       height: MediaQuery.of(context).size.height,
@@ -52,7 +55,7 @@ class AccountPage extends StatelessWidget {
                 AppConstant.sizer(context: context, h: 0.0, w: 0.1),
                 Container(
                   child: Text(
-                    user?.uid ?? "jhon Deo",
+                    userProvider.fetchUserDetails?.fullName ?? "jhon Deo",
                     style: TextStyle(
                         fontSize: 25,
                         color: AppColors.secondaryColor,
