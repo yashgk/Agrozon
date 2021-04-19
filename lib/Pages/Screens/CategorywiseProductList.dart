@@ -1,13 +1,12 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/CommonWidgets/ProductTile.dart';
-import 'package:agrozon/Core/RealtimeDatabase.dart';
 import 'package:agrozon/Model/ProductModel.dart';
 import 'package:flutter/material.dart';
 
 class CategorywiseProductList extends StatefulWidget {
+  final List<Product> product;
   final String title;
-
-  CategorywiseProductList({@required this.title});
+  CategorywiseProductList({@required this.title, @required this.product});
 
   @override
   _CategorywiseProductListState createState() =>
@@ -15,22 +14,11 @@ class CategorywiseProductList extends StatefulWidget {
 }
 
 class _CategorywiseProductListState extends State<CategorywiseProductList> {
-  List<Product> product = [];
-  Future getAllProducts() async {
-    product = await RealtimeDatabase.getProducts(widget.title);
-  }
-
-  @override
-  void initState() {
-    getAllProducts();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     /*24 is for notification bar on Android*/
-    final double itemHeight = (size.height - kToolbarHeight) / 2;
+    final double itemHeight = (size.height - kToolbarHeight - 45) / 2;
     final double itemWidth = size.width / 2;
     return WillPopScope(
       onWillPop: () {
@@ -58,18 +46,20 @@ class _CategorywiseProductListState extends State<CategorywiseProductList> {
           decoration: BoxDecoration(
             color: AppColors.bgBlack,
           ),
-          child: Expanded(
+          child: Container(
             child: GridView.count(
               crossAxisCount: 2,
               childAspectRatio: (itemWidth / itemHeight),
               padding: EdgeInsets.all(10),
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              children: List.generate(product.length, (index) {
+              children: List.generate(widget.product.length, (index) {
                 return ProductTile(
-                    rating: product[index].rating,
-                    price: product[index].price,
-                    label: product[index].productName,
+                    rating: widget.product[index].rating,
+                    description: widget.product[index].productDesc,
+                    productId: widget.product[index].productId,
+                    price: widget.product[index].price,
+                    label: widget.product[index].productName,
                     imagePath: 'assets/images/seed.png',
                     onTap: () {});
               }),

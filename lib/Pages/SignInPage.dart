@@ -3,12 +3,14 @@ import 'dart:ui';
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/AppConstants/AppString.dart';
+import 'package:agrozon/Core/RealtimeDatabase.dart';
 import 'package:agrozon/Model/UserModel.dart';
 import 'package:agrozon/Pages/HomePage.dart';
 import 'package:agrozon/Pages/OtpValidate.dart';
 import 'package:agrozon/Providers/UserProvider.dart';
 import 'package:agrozon/global_variables.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:agrozon/Core/AuthBase.dart';
@@ -188,19 +190,29 @@ class _SignInPageState extends State<SignInPage> {
                 InkWell(
                   onTap: () async {
                     checkConnectivity();
+
                     if (connected == true) {
                       User cred = await Auth.signInWithGoogle();
+                      Map oldFav = {};
                       if (cred != null) {
-                        print("uid set");
-                        print(cred.uid);
                         user = cred;
-
-                        userProvider.userDetails = AppUser(
+                        DatabaseReference favref = FirebaseDatabase.instance
+                            .reference()
+                            .child('users/${cred.uid}');
+                        await favref.once().then((DataSnapshot snapshot) {
+                          if (snapshot.value != null) {
+                            // print(snapshot.value['favourites']);
+                            oldFav = snapshot.value['favourites'] ?? {};
+                          }
+                        });
+                        AppUser finaluser = AppUser(
                             email: cred.email ?? "",
                             fullName: cred.displayName ?? "",
                             mobile: cred.phoneNumber ?? "",
-                            uid: cred.uid);
-
+                            uid: cred.uid,
+                            favourites: oldFav ?? {});
+                        userProvider.userDetails = finaluser;
+                        RealtimeDatabase.addUserData(finaluser);
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => HomePage()),

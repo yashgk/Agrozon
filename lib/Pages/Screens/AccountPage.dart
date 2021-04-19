@@ -53,13 +53,15 @@ class AccountPage extends StatelessWidget {
                   ],
                 ),
                 AppConstant.sizer(context: context, h: 0.0, w: 0.1),
-                Container(
-                  child: Text(
-                    userProvider.fetchUserDetails?.fullName ?? "jhon Deo",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: AppColors.secondaryColor,
-                        fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Container(
+                    child: Text(
+                      userProvider.fetchUserDetails?.fullName ?? "jhon Deo",
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: AppColors.secondaryColor,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 )
               ],

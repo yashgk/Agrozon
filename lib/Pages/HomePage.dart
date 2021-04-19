@@ -1,4 +1,7 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
+import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
+import 'package:agrozon/Core/RealtimeDatabase.dart';
+import 'package:agrozon/Model/ProductModel.dart';
 import 'package:flutter/material.dart';
 import 'package:agrozon/Pages/Screens/StorePage.dart';
 import 'package:agrozon/Pages/Screens/AccountPage.dart';
@@ -13,13 +16,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
+  List<Widget> screenList;
+  List<Product> allproducts = [];
 
-  List<Widget> screenList = [
-    StorePage(),
-    OrderPage(),
-    FavouritePage(),
-    AccountPage(),
-  ];
+  Future<void> getAllProducts() async {
+    allproducts = await RealtimeDatabase.getAllProducts();
+    setState(() {});
+  }
+
+  
+
+  void initTabs(List<Product> plist) async {
+    setState(() {
+      screenList = [
+        StorePage(
+          allproducts: plist,
+        ),
+        OrderPage(),
+        FavouritePage(),
+        AccountPage(),
+      ];
+    });
+  }
+
   void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
@@ -27,7 +46,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    getAllProducts();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (allproducts?.length == 0) {
+      return ProgressDialog(text: 'please wait...');
+    }
+    initTabs(allproducts);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(),

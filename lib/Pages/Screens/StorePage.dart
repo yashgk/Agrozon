@@ -8,21 +8,13 @@ import 'package:agrozon/CommonWidgets/ProductTile.dart';
 import 'package:agrozon/Pages/Screens/CategorywiseProductList.dart';
 
 class StorePage extends StatefulWidget {
+  final List<Product> allproducts;
+  StorePage({@required this.allproducts, });
   @override
   _StorePageState createState() => _StorePageState();
 }
 
 class _StorePageState extends State<StorePage> {
-  List<Product> allproducts = [];
-  Future getAllProducts() async {
-    allproducts = await RealtimeDatabase.getAllProducts();
-  }
-
-  @override
-  void initState() {
-    getAllProducts();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,25 +54,34 @@ class _StorePageState extends State<StorePage> {
                 CarouselTile(
                   label: 'Seed',
                   imagePath: 'assets/images/seed.png',
-                  onTap: () {
+                  onTap: () async {
+                    List<Product> product = [];
+                    product = await RealtimeDatabase.getProducts('seeds');
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CategorywiseProductList(
-                                  title: "seeds",
-                                )));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategorywiseProductList(
+                        
+                          title: "seeds",
+                          product: product,
+                        ),
+                      ),
+                    );
                   },
                 ),
                 AppConstant.sizer(context: context, h: 0.0, w: 0.05),
                 CarouselTile(
                   label: 'Protection',
                   imagePath: 'assets/images/protect.png',
-                  onTap: () {
+                  onTap: () async {
+                    List<Product> product = [];
+                    product = await RealtimeDatabase.getProducts('pestiside');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CategorywiseProductList(
                                   title: "pestiside",
+                                  product: product,
                                 )));
                   },
                 ),
@@ -88,25 +89,33 @@ class _StorePageState extends State<StorePage> {
                 CarouselTile(
                   label: 'Nutrition',
                   imagePath: 'assets/images/nutrition.png',
-                  onTap: () {
+                  onTap: () async {
+                    List<Product> product = [];
+                    product = await RealtimeDatabase.getProducts('fertilizer');
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CategorywiseProductList(
-                                  title: "fertilizer",
-                                )));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategorywiseProductList(
+                          title: "fertilizer",
+                          product: product,
+                        ),
+                      ),
+                    );
                   },
                 ),
                 AppConstant.sizer(context: context, h: 0.0, w: 0.05),
                 CarouselTile(
                   label: 'Hardware',
                   imagePath: 'assets/images/hardware.png',
-                  onTap: () {
+                  onTap: () async {
+                    List<Product> product = [];
+                    product = await RealtimeDatabase.getProducts('hardware');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CategorywiseProductList(
                                   title: "hardware",
+                                  product: product,
                                 )));
                   },
                 ),
@@ -144,11 +153,14 @@ class _StorePageState extends State<StorePage> {
               padding: EdgeInsets.all(10),
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              children: List.generate(allproducts.length, (index) {
+              children: List.generate(widget.allproducts.length, (index) {
                 return ProductTile(
-                    rating: allproducts[index].rating,
-                    price: allproducts[index].price,
-                    label: allproducts[index].productName,
+                  
+                    rating: widget.allproducts[index].rating,
+                    price: widget.allproducts[index].price,
+                    productId: widget.allproducts[index].productId,
+                    description: widget.allproducts[index].productDesc,
+                    label: widget.allproducts[index].productName,
                     imagePath: 'assets/images/seed.png',
                     onTap: () {});
               }),

@@ -1,4 +1,5 @@
 import 'package:agrozon/Pages/LandingPage.dart';
+import 'package:agrozon/Providers/FavouriteProductProvider.dart';
 import 'package:agrozon/Providers/UserProvider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<UserProvider>.value(value: UserProvider())
+        ChangeNotifierProvider<UserProvider>.value(value: UserProvider()),
+        ChangeNotifierProvider<FavouriteProductProvider>.value(
+            value: FavouriteProductProvider())
       ],
       child: MaterialApp(
         home: LandingPage(),

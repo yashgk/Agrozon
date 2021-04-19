@@ -1,9 +1,11 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
+import 'package:agrozon/Core/RealtimeDatabase.dart';
 import 'package:flutter/material.dart';
 
 class OrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    RealtimeDatabase.getFavList();
     return Container(
       decoration: BoxDecoration(color: AppColors.bgBlack),
       child: Column(
