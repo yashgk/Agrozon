@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Product {
   String productId;
   String productName;
@@ -5,11 +7,13 @@ class Product {
   String price;
   String rating;
   bool isFavourite;
+  String imageUrl;
   Product(
-      {this.productId,
-      this.productName,
-      this.productDesc,
-      this.price,
-      this.rating,
-      this.isFavourite});
+      {@required this.productId,
+      @required this.productName,
+      @required this.productDesc,
+      @required this.price,
+      @required this.rating,
+      this.isFavourite = false,
+      @required this.imageUrl});
 }

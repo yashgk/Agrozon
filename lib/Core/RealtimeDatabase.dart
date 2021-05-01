@@ -4,6 +4,7 @@ import 'package:agrozon/global_variables.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class RealtimeDatabase {
+  //to get all the products from database
   static Future<List<Product>> getAllProducts() async {
     DatabaseReference dbref;
 
@@ -24,9 +25,8 @@ class RealtimeDatabase {
     return allProducts;
   }
 
- 
-
-  static Future<List<Product>> getProducts(String type) async {
+// to get categorywise product list from database
+  static Future<List<Product>> getCategoryProducts(String type) async {
     DatabaseReference dbref;
     List<Product> product = [];
     switch (type) {
@@ -56,10 +56,10 @@ class RealtimeDatabase {
     return product;
   }
 
+// to get each product details from product list and build grid
   static Future<List<Product>> getEachProductData(
       Map<dynamic, dynamic> testMap) async {
     List<Product> productList = [];
-    // Map<dynamic, dynamic> favlist = await getFavList();
     testMap.forEach((key, value) {
       productList.add(Product(
         productName: value['productname'] ?? "",
@@ -67,11 +67,14 @@ class RealtimeDatabase {
         price: value['price'] ?? "",
         productDesc: value['description'] ?? "",
         rating: value['rating'] ?? "",
+        imageUrl: value['imageUrl'] ?? "",
       ));
     });
     return productList;
   }
 
+// to add user credential to database for maintaining user favouriter list
+// cart and personal details
   static Future<void> addUserData(AppUser appuser) async {
     DatabaseReference dbref;
     dbref = FirebaseDatabase.instance.reference().child('users/${appuser.uid}');
@@ -99,20 +102,8 @@ class RealtimeDatabase {
     favRef.set(updatedFav);
   }
 
-  // static Future<Map<dynamic, dynamic>> getAllFavProduct() async {
-  //   DatabaseReference dbref;
-  //   Map exitstingfav = {};
-  //   dbref = FirebaseDatabase.instance
-  //       .reference()
-  //       .child('users/${user.uid}/favourites/');
-  //   await dbref.once().then((DataSnapshot snapshot) {
-  //     if (snapshot.value != null) {
-  //       exitstingfav = snapshot.value as Map ?? {};
-  //     }
-  //   });
-  //   return exitstingfav;
-  // }
-   static Future<Map<dynamic, dynamic>> getFavList() async {
+  // to get current users favourite product list
+  static Future<Map<dynamic, dynamic>> getFavList() async {
     DatabaseReference favref;
     Map favproducts = {};
     favref = FirebaseDatabase.instance
@@ -125,7 +116,19 @@ class RealtimeDatabase {
         favproducts = snapshot.value as Map;
       }
     });
-    print(favproducts.length);
     return favproducts;
+  }
+
+//to get product details from favourite product list
+  static Future<List<Product>> getEachFavProduct(
+      Map<dynamic, dynamic> testMap) async {
+    List<Product> allProd = await getAllProducts();
+    List<Product> favProd = [];
+    print(allProd.length.toString());
+    testMap.keys.forEach((element) {
+      //TODO: get deatail for favourite product from common product list
+    });
+    print(favProd.length.toString());
+    return favProd;
   }
 }

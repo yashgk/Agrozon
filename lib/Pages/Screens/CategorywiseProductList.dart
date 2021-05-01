@@ -60,8 +60,8 @@ class _CategorywiseProductListState extends State<CategorywiseProductList> {
                     productId: widget.product[index].productId,
                     price: widget.product[index].price,
                     label: widget.product[index].productName,
-                    imagePath: 'assets/images/seed.png',
-                    onTap: () {});
+                    imagePath: widget.product[index].imageUrl,
+                    );
               }),
             ),
           ),

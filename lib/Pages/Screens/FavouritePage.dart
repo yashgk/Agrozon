@@ -1,6 +1,5 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/CommonWidgets/ProductTile.dart';
-import 'package:agrozon/Core/RealtimeDatabase.dart';
 import 'package:agrozon/Providers/FavouriteProductProvider.dart';
 import 'package:agrozon/Providers/UserProvider.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +16,12 @@ class _FavouritePageState extends State<FavouritePage> {
   @override
   Widget build(BuildContext context) {
     favProvider = Provider.of<FavouriteProductProvider>(context);
-userProvider = Provider.of<UserProvider>(context,listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    
     var size = MediaQuery.of(context).size;
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 45) / 2;
     final double itemWidth = size.width / 2;
-    RealtimeDatabase.getAllProducts();
     if (favProvider.favouriteProducts == []) {
       return Container(
         child: Center(
@@ -47,13 +46,13 @@ userProvider = Provider.of<UserProvider>(context,listen: false);
             children:
                 List.generate(favProvider.favouriteProducts.length, (index) {
               return ProductTile(
-                  rating: favProvider.favouriteProducts[index].rating,
-                  description: favProvider.favouriteProducts[index].productDesc,
-                  price: favProvider.favouriteProducts[index].price,
-                  label: favProvider.favouriteProducts[index].productName,
-                  productId: favProvider.favouriteProducts[index].productId,
-                  imagePath: 'assets/images/seed.png',
-                  onTap: () {});
+                rating: favProvider.favouriteProducts[index].rating,
+                description: favProvider.favouriteProducts[index].productDesc,
+                price: favProvider.favouriteProducts[index].price,
+                label: favProvider.favouriteProducts[index].productName,
+                productId: favProvider.favouriteProducts[index].productId,
+                imagePath: favProvider.favouriteProducts[index].imageUrl,
+              );
             }),
           ),
         ),

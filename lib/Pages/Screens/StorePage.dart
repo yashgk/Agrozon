@@ -9,13 +9,14 @@ import 'package:agrozon/Pages/Screens/CategorywiseProductList.dart';
 
 class StorePage extends StatefulWidget {
   final List<Product> allproducts;
-  StorePage({@required this.allproducts, });
+  StorePage({
+    @required this.allproducts,
+  });
   @override
   _StorePageState createState() => _StorePageState();
 }
 
 class _StorePageState extends State<StorePage> {
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -56,12 +57,11 @@ class _StorePageState extends State<StorePage> {
                   imagePath: 'assets/images/seed.png',
                   onTap: () async {
                     List<Product> product = [];
-                    product = await RealtimeDatabase.getProducts('seeds');
+                    product = await RealtimeDatabase.getCategoryProducts('seeds');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => CategorywiseProductList(
-                        
                           title: "seeds",
                           product: product,
                         ),
@@ -75,7 +75,7 @@ class _StorePageState extends State<StorePage> {
                   imagePath: 'assets/images/protect.png',
                   onTap: () async {
                     List<Product> product = [];
-                    product = await RealtimeDatabase.getProducts('pestiside');
+                    product = await RealtimeDatabase.getCategoryProducts('pestiside');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -91,7 +91,7 @@ class _StorePageState extends State<StorePage> {
                   imagePath: 'assets/images/nutrition.png',
                   onTap: () async {
                     List<Product> product = [];
-                    product = await RealtimeDatabase.getProducts('fertilizer');
+                    product = await RealtimeDatabase.getCategoryProducts('fertilizer');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -109,7 +109,7 @@ class _StorePageState extends State<StorePage> {
                   imagePath: 'assets/images/hardware.png',
                   onTap: () async {
                     List<Product> product = [];
-                    product = await RealtimeDatabase.getProducts('hardware');
+                    product = await RealtimeDatabase.getCategoryProducts('hardware');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -134,15 +134,6 @@ class _StorePageState extends State<StorePage> {
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
-              AppConstant.sizer(context: context, h: 0.0, w: 0.55),
-              InkWell(
-                child: Icon(
-                  Icons.sort,
-                  size: 25,
-                  color: AppColors.secondaryColor,
-                ),
-                onTap: () {},
-              ),
             ],
           ),
           AppConstant.sizer(context: context, h: 0.01, w: 0.0),
@@ -155,14 +146,13 @@ class _StorePageState extends State<StorePage> {
               mainAxisSpacing: 10,
               children: List.generate(widget.allproducts.length, (index) {
                 return ProductTile(
-                  
-                    rating: widget.allproducts[index].rating,
-                    price: widget.allproducts[index].price,
-                    productId: widget.allproducts[index].productId,
-                    description: widget.allproducts[index].productDesc,
-                    label: widget.allproducts[index].productName,
-                    imagePath: 'assets/images/seed.png',
-                    onTap: () {});
+                  rating: widget.allproducts[index].rating,
+                  price: widget.allproducts[index].price,
+                  productId: widget.allproducts[index].productId,
+                  description: widget.allproducts[index].productDesc,
+                  label: widget.allproducts[index].productName,
+                  imagePath: widget.allproducts[index].imageUrl,
+                );
               }),
             ),
           )
