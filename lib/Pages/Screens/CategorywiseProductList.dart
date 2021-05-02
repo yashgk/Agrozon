@@ -55,13 +55,14 @@ class _CategorywiseProductListState extends State<CategorywiseProductList> {
               mainAxisSpacing: 10,
               children: List.generate(widget.product.length, (index) {
                 return ProductTile(
-                    rating: widget.product[index].rating,
-                    description: widget.product[index].productDesc,
-                    productId: widget.product[index].productId,
-                    price: widget.product[index].price,
-                    label: widget.product[index].productName,
-                    imagePath: widget.product[index].imageUrl,
-                    );
+                  rating: widget.product[index].rating,
+                  description: widget.product[index].productDesc,
+                  productId: widget.product[index].productId,
+                  price: widget.product[index].price,
+                  label: widget.product[index].productName,
+                  imagePath: widget.product[index].imageUrl,
+                  isFav: widget.product[index].isFavourite,
+                );
               }),
             ),
           ),

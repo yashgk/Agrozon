@@ -1,10 +1,8 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
-import 'package:agrozon/Model/ProductModel.dart';
+import 'package:agrozon/Core/RealtimeDatabase.dart';
 import 'package:agrozon/Pages/Screens/ProductDescriptionPage.dart';
-import 'package:agrozon/Providers/FavouriteProductProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ProductTile extends StatefulWidget {
   final String label;
@@ -13,6 +11,7 @@ class ProductTile extends StatefulWidget {
   final String rating;
   final String description;
   final String productId;
+  final bool isFav;
 
   ProductTile({
     @required this.label,
@@ -21,6 +20,7 @@ class ProductTile extends StatefulWidget {
     @required this.rating,
     @required this.description,
     @required this.productId,
+    @required this.isFav,
   });
 
   @override
@@ -28,14 +28,11 @@ class ProductTile extends StatefulWidget {
 }
 
 class _ProductTileState extends State<ProductTile> {
-  FavouriteProductProvider favProvider;
-  IconData favIcon = Icons.favorite_border_outlined;
-  bool isFav = false;
+  bool isFav;
 
   @override
   Widget build(BuildContext context) {
-    favProvider = Provider.of<FavouriteProductProvider>(context);
-
+    isFav = widget.isFav;
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -107,20 +104,18 @@ class _ProductTileState extends State<ProductTile> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      isFav = favProvider.addToFav(Product(
-                          productName: widget.label,
-                          price: widget.price,
-                          productDesc: widget.description,
-                          rating: widget.rating,
-                          productId: widget.productId,
-                          imageUrl: widget.imagePath));
-                      favIcon = Icons.favorite;
+                      isFav
+                          ? RealtimeDatabase.removeFavfromdb(
+                              productId: widget.productId)
+                          : RealtimeDatabase.addFavtodb(
+                              productId: widget.productId);
+                      setState(() {});
                     });
                     SnackBar snackBar = SnackBar(
                       content: Text(
                         isFav
-                            ? 'Added to Favourites.'
-                            : 'Already in Favourites.',
+                            ? 'Already in Favourites.'
+                            : 'Added to Favourites.',
                         style: TextStyle(
                             color: AppColors.bgBlack,
                             fontWeight: FontWeight.bold),
@@ -137,7 +132,7 @@ class _ProductTileState extends State<ProductTile> {
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      favIcon,
+                      isFav ? Icons.favorite : Icons.favorite_outline,
                       color: AppColors.bgBlack,
                     ),
                   ),

@@ -18,13 +18,31 @@ class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   List<Widget> screenList;
   List<Product> allproducts = [];
+  Map<dynamic, dynamic> favouriteProduct;
 
+//to get all product list from database
   Future<void> getAllProducts() async {
     allproducts = await RealtimeDatabase.getAllProducts();
     setState(() {});
   }
 
-  
+// to get user's favourite list from database
+  void getFavList() async {
+    favouriteProduct = await RealtimeDatabase.getFavList();
+  }
+
+// to set isFavourite boolean for perticuler product
+  void setFavBool() async {
+    allproducts.forEach((element) {
+      favouriteProduct.keys.forEach((key) {
+        if (element.productId == key.toString()) {
+          setState(() {
+            element.isFavourite = true;
+          });
+        }
+      });
+    });
+  }
 
   void initTabs(List<Product> plist) async {
     setState(() {
@@ -33,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           allproducts: plist,
         ),
         OrderPage(),
-        FavouritePage(),
+        FavouritePage(allproducts: plist),
         AccountPage(),
       ];
     });
@@ -48,6 +66,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getAllProducts();
+    getFavList();
     super.initState();
   }
 
@@ -56,6 +75,7 @@ class _HomePageState extends State<HomePage> {
     if (allproducts?.length == 0) {
       return ProgressDialog(text: 'please wait...');
     }
+    setFavBool();
     initTabs(allproducts);
     return Scaffold(
       resizeToAvoidBottomInset: false,

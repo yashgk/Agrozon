@@ -87,6 +87,7 @@ class RealtimeDatabase {
     dbref.set(usermap);
   }
 
+// to add product in favourite list of user in database
   static void addFavtodb({String productId}) async {
     Map oldfavMap = await getFavList();
     Map newfavMap = {
@@ -100,6 +101,18 @@ class RealtimeDatabase {
     oldfavMap.addAll(newfavMap ?? {});
     updatedFav = oldfavMap ?? {};
     favRef.set(updatedFav);
+  }
+
+  //to remove given item from favourite list form database
+  static void removeFavfromdb({String productId}) async {
+    final favRef = FirebaseDatabase.instance
+        .reference()
+        .child('users/${user.uid}/favourites/');
+    favRef.once().then((DataSnapshot snapshot) {
+      if (snapshot != null) {
+        print(snapshot.value);
+      }
+    });
   }
 
   // to get current users favourite product list
@@ -117,18 +130,5 @@ class RealtimeDatabase {
       }
     });
     return favproducts;
-  }
-
-//to get product details from favourite product list
-  static Future<List<Product>> getEachFavProduct(
-      Map<dynamic, dynamic> testMap) async {
-    List<Product> allProd = await getAllProducts();
-    List<Product> favProd = [];
-    print(allProd.length.toString());
-    testMap.keys.forEach((element) {
-      //TODO: get deatail for favourite product from common product list
-    });
-    print(favProd.length.toString());
-    return favProd;
   }
 }

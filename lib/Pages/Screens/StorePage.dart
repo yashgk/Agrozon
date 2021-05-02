@@ -57,7 +57,8 @@ class _StorePageState extends State<StorePage> {
                   imagePath: 'assets/images/seed.png',
                   onTap: () async {
                     List<Product> product = [];
-                    product = await RealtimeDatabase.getCategoryProducts('seeds');
+                    product =
+                        await RealtimeDatabase.getCategoryProducts('seeds');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -75,7 +76,8 @@ class _StorePageState extends State<StorePage> {
                   imagePath: 'assets/images/protect.png',
                   onTap: () async {
                     List<Product> product = [];
-                    product = await RealtimeDatabase.getCategoryProducts('pestiside');
+                    product =
+                        await RealtimeDatabase.getCategoryProducts('pestiside');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -91,7 +93,8 @@ class _StorePageState extends State<StorePage> {
                   imagePath: 'assets/images/nutrition.png',
                   onTap: () async {
                     List<Product> product = [];
-                    product = await RealtimeDatabase.getCategoryProducts('fertilizer');
+                    product = await RealtimeDatabase.getCategoryProducts(
+                        'fertilizer');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -109,7 +112,8 @@ class _StorePageState extends State<StorePage> {
                   imagePath: 'assets/images/hardware.png',
                   onTap: () async {
                     List<Product> product = [];
-                    product = await RealtimeDatabase.getCategoryProducts('hardware');
+                    product =
+                        await RealtimeDatabase.getCategoryProducts('hardware');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -152,6 +156,7 @@ class _StorePageState extends State<StorePage> {
                   description: widget.allproducts[index].productDesc,
                   label: widget.allproducts[index].productName,
                   imagePath: widget.allproducts[index].imageUrl,
+                  isFav: widget.allproducts[index].isFavourite,
                 );
               }),
             ),
