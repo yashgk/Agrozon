@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'AppConstants/AppColors.dart';
 
-User user;
+
 
 OutlineInputBorder textFieldBorder = OutlineInputBorder(
   borderSide: BorderSide(

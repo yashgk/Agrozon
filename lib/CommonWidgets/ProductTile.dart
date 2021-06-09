@@ -104,11 +104,11 @@ class _ProductTileState extends State<ProductTile> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      isFav
-                          ? RealtimeDatabase.removeFavfromdb(
-                              productId: widget.productId)
-                          : RealtimeDatabase.addFavtodb(
-                              productId: widget.productId);
+                      // isFav
+                      //     ? RealtimeDatabase.removeFavfromdb(
+                      //         productId: widget.productId)
+                      //     : RealtimeDatabase.addFavtodb(
+                      //         productId: widget.productId);
                       setState(() {});
                     });
                     SnackBar snackBar = SnackBar(

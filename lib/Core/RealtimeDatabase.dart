@@ -1,9 +1,15 @@
 import 'package:agrozon/Model/ProductModel.dart';
 import 'package:agrozon/Model/UserModel.dart';
-import 'package:agrozon/global_variables.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import 'Sharef_Prefs.dart';
+
 class RealtimeDatabase {
+  static AppUser user;
+  static Future<void> getUser() async {
+    user = await Prefs.getUser();
+  }
+
   //to get all the products from database
   static Future<List<Product>> getAllProducts() async {
     DatabaseReference dbref;
@@ -76,35 +82,37 @@ class RealtimeDatabase {
 // to add user credential to database for maintaining user favouriter list
 // cart and personal details
   static Future<void> addUserData(AppUser appuser) async {
+    await getUser();
     DatabaseReference dbref;
     dbref = FirebaseDatabase.instance.reference().child('users/${appuser.uid}');
     Map usermap = {
       'username': appuser.fullName,
       'phone': appuser.mobile,
       'email': appuser.email,
-      'favourites': appuser.favourites
     };
     dbref.set(usermap);
   }
 
-// to add product in favourite list of user in database
-  static void addFavtodb({String productId}) async {
-    Map oldfavMap = await getFavList();
-    Map newfavMap = {
-      '$productId': 'true',
-    };
-    Map updatedFav;
-    final favRef = FirebaseDatabase.instance
-        .reference()
-        .child('users/${user.uid}/favourites/');
+// // to add product in favourite list of user in database
+//   static void addFavtodb({String productId}) async {
+//     await getUser();
+//     Map oldfavMap = await getFavList();
+//     Map newfavMap = {
+//       '$productId': 'true',
+//     };
+//     Map updatedFav;
+//     final favRef = FirebaseDatabase.instance
+//         .reference()
+//         .child('users/${user.uid}/favourites/');
 
-    oldfavMap.addAll(newfavMap ?? {});
-    updatedFav = oldfavMap ?? {};
-    favRef.set(updatedFav);
-  }
+//     oldfavMap.addAll(newfavMap ?? {});
+//     updatedFav = oldfavMap ?? {};
+//     favRef.set(updatedFav);
+//   }
 
   //to remove given item from favourite list form database
   static void removeFavfromdb({String productId}) async {
+    await getUser();
     final favRef = FirebaseDatabase.instance
         .reference()
         .child('users/${user.uid}/favourites/');
@@ -116,19 +124,22 @@ class RealtimeDatabase {
   }
 
   // to get current users favourite product list
-  static Future<Map<dynamic, dynamic>> getFavList() async {
+  static Future<List<Product>> getFavList() async {
+    await getUser();
     DatabaseReference favref;
-    Map favproducts = {};
+    List<Product> favproducts = [];
     favref = FirebaseDatabase.instance
         .reference()
         .child('users')
         .child('${user.uid}')
         .child('favourites');
-    await favref.once().then((DataSnapshot snapshot) {
+    await favref.once().then((DataSnapshot snapshot) async {
       if (snapshot.value != null) {
-        favproducts = snapshot.value as Map;
+        List<Product> temp = [];
+        temp = await getEachProductData(snapshot.value as Map);
+        
       }
     });
-    return favproducts;
+    //return favproducts;
   }
 }
