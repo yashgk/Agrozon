@@ -49,7 +49,6 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(

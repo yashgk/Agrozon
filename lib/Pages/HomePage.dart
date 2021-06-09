@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
 //to get all product list from database
   Future<void> getAllProducts() async {
     allproducts = await RealtimeDatabase.getAllProducts();
+    print(allproducts.length);
     setState(() {});
   }
 
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> {
           allproducts: plist,
         ),
         OrderPage(),
-        FavouritePage(allproducts: plist),
+        FavouritePage(),
         AccountPage(),
       ];
     });
