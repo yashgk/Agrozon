@@ -1,7 +1,7 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
-import 'package:agrozon/Core/Sharef_Prefs.dart';
+import 'package:agrozon/Core/Prefs.dart';
 import 'package:agrozon/Model/UserModel.dart';
 import 'package:agrozon/global_variables.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +13,12 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool isEditable = false;
   TextEditingController nameController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   AppUser user;
   bool isLoading = false;
+  bool isEditing = false;
   @override
   void initState() {
     getUser();
@@ -51,21 +51,23 @@ class _ProfilePageState extends State<ProfilePage> {
         centerTitle: true,
         backgroundColor: AppColors.bgWhite,
         actions: [
-          Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    if (isEditable == false) {
-                      isEditable = true;
-                    }
-                  });
-                },
-                child: Icon(
-                  Icons.edit,
-                  color: AppColors.secondaryColor,
-                ),
-              ))
+          isEditing
+              ? Container()
+              : Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        if (isEditing == false) {
+                          isEditing = true;
+                        }
+                      });
+                    },
+                    child: Icon(
+                      Icons.edit,
+                      color: AppColors.secondaryColor,
+                    ),
+                  ))
         ],
         leading: InkWell(
           child: Icon(Icons.arrow_back_ios, color: AppColors.secondaryColor),
@@ -98,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: TextField(
                       keyboardType: TextInputType.name,
                       maxLength: 20,
-                      enabled: isEditable,
+                      enabled: isEditing,
                       controller: nameController,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       cursorColor: AppColors.secondaryColor,
@@ -127,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: TextField(
                       keyboardType: TextInputType.name,
                       maxLength: 20,
-                      enabled: isEditable,
+                      enabled: isEditing,
                       controller: mobileController,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       cursorColor: AppColors.secondaryColor,
@@ -166,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: TextField(
                       keyboardType: TextInputType.name,
                       maxLength: 20,
-                      enabled: isEditable,
+                      enabled: isEditing,
                       controller: emailController,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       cursorColor: AppColors.secondaryColor,
@@ -184,23 +186,32 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   AppConstant.sizer(context: context, h: 0.03, w: 0.0),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Save',
-                      style: TextStyle(
-                          color: AppColors.bgBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColors.secondaryColor,
-                      elevation: 5.0,
-                      shadowColor: AppColors.secondaryColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                  )
+                  isEditing
+                      ? Container()
+                      : ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              if (isEditing) {
+                                isEditing = true;
+                              }
+                              //TODO implement profile section
+                            });
+                          },
+                          child: Text(
+                            'Save',
+                            style: TextStyle(
+                                color: AppColors.bgBlack,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: AppColors.secondaryColor,
+                            elevation: 5.0,
+                            shadowColor: AppColors.secondaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                          ),
+                        )
                 ],
               ),
             ),

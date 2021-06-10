@@ -1,45 +1,35 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/Core/RealtimeDatabase.dart';
+import 'package:agrozon/Model/ProductModel.dart';
 import 'package:agrozon/Pages/Screens/ProductDescriptionPage.dart';
 import 'package:flutter/material.dart';
 
 class ProductTile extends StatefulWidget {
-  final String label;
-  final String imagePath;
-  final String price;
-  final String rating;
-  final String description;
-  final String productId;
-  final bool isFav;
-
-  ProductTile({
-    @required this.label,
-    @required this.imagePath,
-    @required this.price,
-    @required this.rating,
-    @required this.description,
-    @required this.productId,
-    @required this.isFav,
-  });
+  final Product product;
+  final Function update;
+  ProductTile({@required this.product, @required this.update});
 
   @override
   _ProductTileState createState() => _ProductTileState();
 }
 
 class _ProductTileState extends State<ProductTile> {
+  SnackBar snackBar;
+  String snackBarText = "";
   bool isFav;
 
   @override
   Widget build(BuildContext context) {
-    isFav = widget.isFav;
+    isFav = widget.product.isFavourite ?? false;
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                ProductDescriptionPage(productId: widget.productId),
+            builder: (context) => ProductDescriptionPage(
+              product: widget.product,
+            ),
           ),
         );
       },
@@ -50,7 +40,7 @@ class _ProductTileState extends State<ProductTile> {
         child: Column(
           children: [
             Image.network(
-              widget.imagePath,
+              widget.product.imageUrl,
               height: 180,
               width: 130,
             ),
@@ -60,7 +50,7 @@ class _ProductTileState extends State<ProductTile> {
                 Expanded(
                   child: Container(
                     child: Text(
-                      widget.label,
+                      widget.product.productName,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -77,14 +67,14 @@ class _ProductTileState extends State<ProductTile> {
                 SizedBox(
                   width: 90,
                   child: Text(
-                    widget.price,
+                    widget.product.price,
                     style: TextStyle(
                         color: AppColors.whiteColor,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
                 Text(
-                  widget.rating,
+                  widget.product.rating,
                   style: TextStyle(
                       color: AppColors.whiteColor, fontWeight: FontWeight.bold),
                 ),
@@ -102,20 +92,22 @@ class _ProductTileState extends State<ProductTile> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
-                  onTap: () {
-                    setState(() {
-                      // isFav
-                      //     ? RealtimeDatabase.removeFavfromdb(
-                      //         productId: widget.productId)
-                      //     : RealtimeDatabase.addFavtodb(
-                      //         productId: widget.productId);
-                      setState(() {});
-                    });
-                    SnackBar snackBar = SnackBar(
+                  onTap: () async {
+                    if (isFav) {
+                      isFav = widget.product.isFavourite =
+                          await RealtimeDatabase.removeFavfromdb(
+                              productName: widget.product.productName);
+                      snackBarText = "Removed from Favourites";
+                    } else {
+                      isFav = widget.product.isFavourite =
+                          await RealtimeDatabase.addFavtodb(
+                              product: widget.product);
+                      snackBarText = "Added to Favourites";
+                    }
+                    setState(() {});
+                    snackBar = SnackBar(
                       content: Text(
-                        isFav
-                            ? 'Already in Favourites.'
-                            : 'Added to Favourites.',
+                        snackBarText,
                         style: TextStyle(
                             color: AppColors.bgBlack,
                             fontWeight: FontWeight.bold),
@@ -124,6 +116,7 @@ class _ProductTileState extends State<ProductTile> {
                       duration: Duration(seconds: 2),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    widget.update();
                   },
                   child: Container(
                     padding: EdgeInsets.all(5),
@@ -139,7 +132,8 @@ class _ProductTileState extends State<ProductTile> {
                 ),
                 AppConstant.sizer(context: context, h: 0.0, w: 0.02),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    await RealtimeDatabase.addToKart(widget.product.productId);
                     SnackBar snackBar = SnackBar(
                       content: Text(
                         'Added to Kart.',

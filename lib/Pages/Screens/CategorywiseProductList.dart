@@ -1,12 +1,13 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/CommonWidgets/ProductTile.dart';
+import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
 import 'package:agrozon/Model/ProductModel.dart';
 import 'package:flutter/material.dart';
 
 class CategorywiseProductList extends StatefulWidget {
-  final List<Product> product;
+  final List<Product> allproduct;
   final String title;
-  CategorywiseProductList({@required this.title, @required this.product});
+  CategorywiseProductList({@required this.title, @required this.allproduct});
 
   @override
   _CategorywiseProductListState createState() =>
@@ -14,15 +15,59 @@ class CategorywiseProductList extends StatefulWidget {
 }
 
 class _CategorywiseProductListState extends State<CategorywiseProductList> {
+  List<Product> products = [];
+  @override
+  void initState() {
+    filterProducts();
+    super.initState();
+  }
+
+  void filterProducts() {
+    switch (widget.title) {
+      case "seeds":
+        widget.allproduct.forEach((element) {
+          if (element.productId.contains('s')) {
+            products.add(element);
+          }
+        });
+        break;
+      case "pestiside":
+        widget.allproduct.forEach((element) {
+          if (element.productId.contains('p')) {
+            products.add(element);
+          }
+        });
+        break;
+      case "fertilizer":
+        widget.allproduct.forEach((element) {
+          if (element.productId.contains('f')) {
+            products.add(element);
+          }
+        });
+        break;
+      case "hardware":
+        widget.allproduct.forEach((element) {
+          if (element.productId.contains('h')) {
+            products.add(element);
+          }
+        });
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 45) / 2;
     final double itemWidth = size.width / 2;
+    if (products.length == 0) {
+      return ProgressDialog(text: 'please wait...');
+    }
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
         Navigator.pop(context);
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -53,15 +98,12 @@ class _CategorywiseProductListState extends State<CategorywiseProductList> {
               padding: EdgeInsets.all(10),
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              children: List.generate(widget.product.length, (index) {
+              children: List.generate(products.length, (index) {
                 return ProductTile(
-                  rating: widget.product[index].rating,
-                  description: widget.product[index].productDesc,
-                  productId: widget.product[index].productId,
-                  price: widget.product[index].price,
-                  label: widget.product[index].productName,
-                  imagePath: widget.product[index].imageUrl,
-                  isFav: widget.product[index].isFavourite,
+                  product: products[index],
+                  update: () {
+                    setState(() {});
+                  },
                 );
               }),
             ),

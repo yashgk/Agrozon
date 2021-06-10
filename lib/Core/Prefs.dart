@@ -20,4 +20,12 @@ class Prefs {
 
     return AppUser(fullName: name, uid: uid, email: email, mobile: mobile);
   }
+
+  static void logOut() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString("userId", "");
+    preferences.setString("email", "");
+    preferences.setString("name", "");
+    preferences.setString("mobile", "");
+  }
 }

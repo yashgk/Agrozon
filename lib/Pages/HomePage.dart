@@ -1,7 +1,5 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
-import 'package:agrozon/Core/RealtimeDatabase.dart';
-import 'package:agrozon/Model/ProductModel.dart';
 import 'package:flutter/material.dart';
 import 'package:agrozon/Pages/Screens/StorePage.dart';
 import 'package:agrozon/Pages/Screens/AccountPage.dart';
@@ -17,20 +15,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   List<Widget> screenList;
-  List<Product> allproducts = [];
+ 
 
-//to get all product list from database
-  Future<void> getAllProducts() async {
-    allproducts = await RealtimeDatabase.getAllProducts();
-    print(allproducts.length);
-    setState(() {});
-  }
-
-  void initTabs(List<Product> plist) async {
+  void initTabs() async {
     setState(() {
       screenList = [
         StorePage(
-          allproducts: plist,
         ),
         OrderPage(),
         FavouritePage(),
@@ -46,18 +36,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void initState() {
-    getAllProducts();
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (allproducts?.length == 0) {
-      return ProgressDialog(text: 'please wait...');
-    }
-    initTabs(allproducts);
+    initTabs();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(),

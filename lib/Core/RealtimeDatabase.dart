@@ -2,10 +2,11 @@ import 'package:agrozon/Model/ProductModel.dart';
 import 'package:agrozon/Model/UserModel.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-import 'Sharef_Prefs.dart';
+import 'Prefs.dart';
 
 class RealtimeDatabase {
   static AppUser user;
+
   static Future<void> getUser() async {
     user = await Prefs.getUser();
   }
@@ -85,42 +86,48 @@ class RealtimeDatabase {
     await getUser();
     DatabaseReference dbref;
     dbref = FirebaseDatabase.instance.reference().child('users/${appuser.uid}');
-    Map usermap = {
+    Map<String, dynamic> usermap = {
       'username': appuser.fullName,
       'phone': appuser.mobile,
       'email': appuser.email,
     };
-    dbref.set(usermap);
+    dbref.update(usermap);
   }
 
-// // to add product in favourite list of user in database
-//   static void addFavtodb({String productId}) async {
-//     await getUser();
-//     Map oldfavMap = await getFavList();
-//     Map newfavMap = {
-//       '$productId': 'true',
-//     };
-//     Map updatedFav;
-//     final favRef = FirebaseDatabase.instance
-//         .reference()
-//         .child('users/${user.uid}/favourites/');
-
-//     oldfavMap.addAll(newfavMap ?? {});
-//     updatedFav = oldfavMap ?? {};
-//     favRef.set(updatedFav);
-//   }
-
-  //to remove given item from favourite list form database
-  static void removeFavfromdb({String productId}) async {
+// to add product in favourite list of user in database
+  static Future<bool> addFavtodb({Product product}) async {
     await getUser();
     final favRef = FirebaseDatabase.instance
         .reference()
         .child('users/${user.uid}/favourites/');
-    favRef.once().then((DataSnapshot snapshot) {
-      if (snapshot != null) {
-        print(snapshot.value);
+    Map<String, dynamic> favProduct = {
+      "${product.productName}": {
+        'description': product.productDesc,
+        'imageUrl': product.imageUrl,
+        'price': product.price,
+        'productid': product.productId,
+        'productname': product.productName,
+        'rating': product.rating
       }
-    });
+    };
+    if (user.uid != null) {
+      favRef.update(favProduct);
+      return true;
+    } else {
+      print("uid is null");
+      return false;
+    }
+  }
+
+  //to remove given item from favourite list form database
+  static Future<bool> removeFavfromdb({String productName}) async {
+    await getUser();
+    final favRef = FirebaseDatabase.instance
+        .reference()
+        .child('users/${user.uid}/favourites/');
+    print(productName);
+    await favRef.child(productName).remove();
+    return false;
   }
 
   // to get current users favourite product list
@@ -137,9 +144,92 @@ class RealtimeDatabase {
       if (snapshot.value != null) {
         List<Product> temp = [];
         temp = await getEachProductData(snapshot.value as Map);
-        
+        favproducts.addAll(temp);
       }
     });
-    //return favproducts;
+    return favproducts;
+  }
+
+  static Future<Map<dynamic, dynamic>> getKartList() async {
+    await getUser();
+    DatabaseReference kartRef;
+    Map<dynamic, dynamic> kartMap = {};
+    kartRef = FirebaseDatabase.instance
+        .reference()
+        .child('users')
+        .child('${user.uid}')
+        .child("kart");
+    print(user.uid);
+    await kartRef.once().then((DataSnapshot snapshot) {
+      if (snapshot != null) {
+        kartMap = snapshot.value as Map;
+      }
+    });
+
+    return kartMap;
+  }
+
+  static Future<void> addToKart(String productid) async {
+    await getUser();
+    DatabaseReference kartRef;
+
+    Map<dynamic, dynamic> kart = {};
+    List<dynamic> kartProdList = [];
+    kartRef = FirebaseDatabase.instance
+        .reference()
+        .child('users')
+        .child('${user.uid}')
+        .child("kart");
+    await kartRef.once().then((DataSnapshot snapshot) {
+      if (snapshot != null) {
+        kart = snapshot.value;
+        kartProdList = kart.keys.toList();
+      }
+    });
+    int len = 0;
+    if (kartProdList.contains(productid)) {
+      len = int.parse(kart[productid].toString());
+      len++;
+      await kartRef.update({'$productid': '$len'});
+    } else {
+      await kartRef.update({'$productid': '1'});
+    }
+  }
+
+  static Future<void> removeFromKart(String productid) async {
+    await getUser();
+    DatabaseReference kartRef;
+    Map<dynamic, dynamic> kart = {};
+    List<dynamic> kartProdList = [];
+    kartRef = FirebaseDatabase.instance
+        .reference()
+        .child('users')
+        .child('${user.uid}')
+        .child("kart");
+    await kartRef.once().then((DataSnapshot snapshot) {
+      if (snapshot != null) {
+        kart = snapshot.value;
+        kartProdList = kart.keys.toList();
+      }
+    });
+    int len = 0;
+    if (kartProdList.contains(productid)) {
+      len = int.parse(kart[productid].toString());
+      len--;
+      await kartRef.update({'$productid': '$len'});
+    } else {
+      print("not in kart");
+    }
+  }
+
+  static Future<void> deleteFromKart(String productid) async {
+    await getUser();
+    DatabaseReference kartRef;
+    kartRef = FirebaseDatabase.instance
+        .reference()
+        .child('users')
+        .child('${user.uid}')
+        .child("kart");
+    kartRef.child(productid).remove();
   }
 }

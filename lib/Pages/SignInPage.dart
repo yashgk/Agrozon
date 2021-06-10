@@ -4,7 +4,7 @@ import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/AppConstants/AppString.dart';
 import 'package:agrozon/Core/RealtimeDatabase.dart';
-import 'package:agrozon/Core/Sharef_Prefs.dart';
+import 'package:agrozon/Core/Prefs.dart';
 import 'package:agrozon/Model/UserModel.dart';
 import 'package:agrozon/Pages/HomePage.dart';
 import 'package:agrozon/Pages/OtpValidate.dart';

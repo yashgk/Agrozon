@@ -2,7 +2,7 @@ import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
 import 'package:agrozon/Core/AuthBase.dart';
-import 'package:agrozon/Core/Sharef_Prefs.dart';
+import 'package:agrozon/Core/Prefs.dart';
 import 'package:agrozon/Model/UserModel.dart';
 import 'package:agrozon/Pages/LandingPage.dart';
 import 'package:agrozon/Pages/Screens/ProfilePage.dart';
@@ -80,7 +80,7 @@ class _AccountPageState extends State<AccountPage> {
                       Expanded(
                         child: Container(
                           child: Text(
-                            user.fullName,
+                            user.fullName ?? "",
                             style: TextStyle(
                                 fontSize: 25,
                                 color: AppColors.secondaryColor,
@@ -123,6 +123,7 @@ class _AccountPageState extends State<AccountPage> {
                   onTap: () async {
                     bool canLogout = await Auth.signOut();
                     if (canLogout) {
+                      Prefs.logOut();
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(

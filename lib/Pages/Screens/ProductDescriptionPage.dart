@@ -1,50 +1,25 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
-import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
 import 'package:agrozon/Core/RealtimeDatabase.dart';
 import 'package:agrozon/Model/ProductModel.dart';
 import 'package:flutter/material.dart';
 
-
 class ProductDescriptionPage extends StatefulWidget {
-  final String productId;
+  final Product product;
 
-  ProductDescriptionPage({@required this.productId});
+  ProductDescriptionPage({@required this.product});
   @override
   _ProductDescriptionPageState createState() => _ProductDescriptionPageState();
 }
 
 class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
-  List<Product> allproducts = [];
-  Product currentProduct;
-  int quantity = 1;
-
-  @override
-  void initState() {
-    getAllProducts();
-    super.initState();
-  }
-
-  Future<void> getAllProducts() async {
-    allproducts = await RealtimeDatabase.getAllProducts();
-    setState(() {});
-  }
-
-  void getCurrentProduct() async {
-    allproducts.forEach((element) {
-      if (widget.productId == element.productId) {
-        currentProduct = element;
-      }
-    });
-  }
+  SnackBar snackBar;
+  String snackBarText = "";
+  bool isFav;
 
   @override
   Widget build(BuildContext context) {
-    
-    if (allproducts?.length == 0) {
-      return ProgressDialog(text: 'please wait...');
-    }
-    getCurrentProduct();
+    isFav = widget.product.isFavourite;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.bgWhite,
@@ -69,7 +44,7 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    currentProduct.productName,
+                    widget.product.productName,
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -80,72 +55,25 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
               AppConstant.sizer(context: context, h: 0.02, w: 0.0),
               Container(
                 child: Image.network(
-                  currentProduct.imageUrl,
+                  widget.product.imageUrl,
                 ),
               ),
               AppConstant.sizer(context: context, h: 0.02, w: 0.0),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     "₹ ",
                     style: TextStyle(
                         color: AppColors.secondaryColor, fontSize: 15),
                   ),
-                  Text(currentProduct.price,
+                  Text(widget.product.price,
                       style: TextStyle(
                           color: AppColors.secondaryColor, fontSize: 20)),
-                  AppConstant.sizer(context: context, h: 0.0, w: 0.55),
-                  Container(
-                    child: InkWell(
-                      onTap: () {
-                        if (quantity != 30) {
-                          setState(() {
-                            quantity++;
-                          });
-                        }
-                      },
-                      child: Icon(
-                        Icons.add,
-                        color: AppColors.secondaryColor,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 35,
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      quantity.toString(),
-                      style: TextStyle(
-                          color: AppColors.secondaryColor, fontSize: 20),
-                    ),
-                  ),
-                  Container(
-                    child: InkWell(
-                      splashColor: AppColors.bgWhite,
-                      onTap: () {
-                        if (quantity != 1) {
-                          setState(() {
-                            quantity--;
-                          });
-                        }
-                      },
-                      child: Icon(
-                        Icons.remove,
-                        color: AppColors.secondaryColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              AppConstant.sizer(context: context, h: 0.02, w: 0.0),
-              Container(
-                  child: Row(
-                children: [
+                  AppConstant.sizer(context: context, h: 0.0, w: 0.7),
                   Text(
-                    currentProduct.rating,
+                    widget.product.rating,
                     style: TextStyle(
-                        color: AppColors.secondaryColor, fontSize: 15),
+                        color: AppColors.secondaryColor, fontSize: 20),
                   ),
                   AppConstant.sizer(context: context, h: 0.0, w: 0.02),
                   Icon(
@@ -154,7 +82,7 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                     size: 15,
                   )
                 ],
-              )),
+              ),
               AppConstant.sizer(context: context, h: 0.02, w: 0.0),
               Container(
                   decoration: BoxDecoration(
@@ -163,37 +91,41 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                   ),
                   padding: EdgeInsets.all(5),
                   child: InkWell(
-                    onTap: () {
-                      // setState(() {
-                      //   currentProduct.isFavourite = favProvider.addToFav(Product(
-                      //       productName: widget.label,
-                      //       price: widget.price,
-                      //       productDesc: widget.description,
-                      //       rating: widget.rating,
-                      //       productId: widget.productId,
-                      //       imageUrl: widget.imagePath));
-                      //   favIcon = Icons.favorite;
-                      // });
-                      // SnackBar snackBar = SnackBar(
-                      //   content: Text(
-                      //     isFav
-                      //         ? 'Added to Favourites.'
-                      //         : 'Already in Favourites.',
-                      //     style: TextStyle(
-                      //         color: AppColors.bgBlack,
-                      //         fontWeight: FontWeight.bold),
-                      //   ),
-                      //   backgroundColor: AppColors.secondaryColor,
-                      //   duration: Duration(seconds: 2),
-                      // );
-                      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    onTap: () async {
+                      if (isFav) {
+                        isFav = widget.product.isFavourite =
+                            await RealtimeDatabase.removeFavfromdb(
+                                productName: widget.product.productName);
+                        snackBarText = "Removed from Favourites";
+                      } else {
+                        isFav = widget.product.isFavourite =
+                            await RealtimeDatabase.addFavtodb(
+                                product: widget.product);
+                        snackBarText = "Added to Favourites";
+                      }
+                      setState(() {});
+                      snackBar = SnackBar(
+                        content: Text(
+                          snackBarText,
+                          style: TextStyle(
+                              color: AppColors.bgBlack,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        backgroundColor: AppColors.secondaryColor,
+                        duration: Duration(seconds: 2),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.favorite_outline),
+                        isFav
+                            ? Icon(Icons.favorite_rounded)
+                            : Icon(Icons.favorite_outline),
                         Text(
-                          "Add To Favourites",
+                          isFav
+                              ? "Remove from Favourites"
+                              : "Add To Favourites",
                           style: TextStyle(fontSize: 15),
                         )
                       ],
@@ -235,7 +167,7 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                   child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  currentProduct.productDesc,
+                  widget.product.productDesc,
                   textAlign: TextAlign.left,
                   style:
                       TextStyle(color: AppColors.secondaryColor, fontSize: 20),

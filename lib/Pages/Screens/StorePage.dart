@@ -1,5 +1,6 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
+import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
 import 'package:agrozon/Core/RealtimeDatabase.dart';
 import 'package:agrozon/Model/ProductModel.dart';
 import 'package:flutter/material.dart';
@@ -8,21 +9,58 @@ import 'package:agrozon/CommonWidgets/ProductTile.dart';
 import 'package:agrozon/Pages/Screens/CategorywiseProductList.dart';
 
 class StorePage extends StatefulWidget {
-  final List<Product> allproducts;
-  StorePage({
-    @required this.allproducts,
-  });
   @override
   _StorePageState createState() => _StorePageState();
 }
 
 class _StorePageState extends State<StorePage> {
+  List<Product> allproducts = [];
+  List<Product> favouriteProds = [];
+
+
+  Future<void> getAllProducts() async {
+    allproducts = await RealtimeDatabase.getAllProducts();
+    setState(() {});
+  }
+
+  Future<void> getFav() async {
+    favouriteProds = await RealtimeDatabase.getFavList();
+    favouriteProds.forEach((element) {
+      element.isFavourite = true;
+    });
+
+    setState(() {});
+  }
+
+  Future<void> finalize() async {
+    await getAllProducts();
+    await getFav();
+
+    allproducts.forEach((element) {
+      favouriteProds.forEach((favelement) {
+        if (favelement.productName == element.productName) {
+          element.isFavourite = true;
+        }
+      });
+    });
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    finalize();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
     final double itemWidth = size.width / 2;
+    if (allproducts.length == 0) {
+      return ProgressDialog(text: 'please wait...');
+    }
     return Container(
       padding: EdgeInsets.all(10),
       height: MediaQuery.of(context).size.height,
@@ -56,15 +94,12 @@ class _StorePageState extends State<StorePage> {
                   label: 'Seed',
                   imagePath: 'assets/images/seed.png',
                   onTap: () async {
-                    List<Product> product = [];
-                    product =
-                        await RealtimeDatabase.getCategoryProducts('seeds');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => CategorywiseProductList(
                           title: "seeds",
-                          product: product,
+                          allproduct: allproducts,
                         ),
                       ),
                     );
@@ -75,15 +110,12 @@ class _StorePageState extends State<StorePage> {
                   label: 'Protection',
                   imagePath: 'assets/images/protect.png',
                   onTap: () async {
-                    List<Product> product = [];
-                    product =
-                        await RealtimeDatabase.getCategoryProducts('pestiside');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CategorywiseProductList(
                                   title: "pestiside",
-                                  product: product,
+                                  allproduct: allproducts,
                                 )));
                   },
                 ),
@@ -92,15 +124,12 @@ class _StorePageState extends State<StorePage> {
                   label: 'Nutrition',
                   imagePath: 'assets/images/nutrition.png',
                   onTap: () async {
-                    List<Product> product = [];
-                    product = await RealtimeDatabase.getCategoryProducts(
-                        'fertilizer');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => CategorywiseProductList(
                           title: "fertilizer",
-                          product: product,
+                          allproduct: allproducts,
                         ),
                       ),
                     );
@@ -111,15 +140,12 @@ class _StorePageState extends State<StorePage> {
                   label: 'Hardware',
                   imagePath: 'assets/images/hardware.png',
                   onTap: () async {
-                    List<Product> product = [];
-                    product =
-                        await RealtimeDatabase.getCategoryProducts('hardware');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CategorywiseProductList(
                                   title: "hardware",
-                                  product: product,
+                                  allproduct: allproducts,
                                 )));
                   },
                 ),
@@ -148,15 +174,12 @@ class _StorePageState extends State<StorePage> {
               padding: EdgeInsets.all(10),
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              children: List.generate(widget.allproducts.length, (index) {
+              children: List.generate(allproducts.length, (index) {
                 return ProductTile(
-                  rating: widget.allproducts[index].rating,
-                  price: widget.allproducts[index].price,
-                  productId: widget.allproducts[index].productId,
-                  description: widget.allproducts[index].productDesc,
-                  label: widget.allproducts[index].productName,
-                  imagePath: widget.allproducts[index].imageUrl,
-                  isFav: widget.allproducts[index].isFavourite,
+                  product: allproducts[index],
+                  update: () {
+                    setState(() {});
+                  },
                 );
               }),
             ),
