@@ -283,17 +283,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.bgWhite,
-      centerTitle: true,
+      backgroundColor: AppColors.whiteColor,
+      elevation: 0.0,
       title: Text(
         AppString.appName,
-        style: TextStyle(color: AppColors.secondaryColor),
+        style: TextStyle(
+            color: AppColors.darkGreyColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 30),
       ),
       actions: [
         IconButton(
           icon: Icon(
             Icons.notifications,
-            color: AppColors.secondaryColor,
+            color: AppColors.darkGreyColor,
           ),
           onPressed: () {},
         )

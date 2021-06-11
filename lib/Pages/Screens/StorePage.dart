@@ -17,7 +17,6 @@ class _StorePageState extends State<StorePage> {
   List<Product> allproducts = [];
   List<Product> favouriteProds = [];
 
-
   Future<void> getAllProducts() async {
     allproducts = await RealtimeDatabase.getAllProducts();
     setState(() {});
@@ -62,10 +61,10 @@ class _StorePageState extends State<StorePage> {
       return ProgressDialog(text: 'please wait...');
     }
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(5),
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(color: AppColors.bgBlack),
+      decoration: BoxDecoration(color: AppColors.whiteColor),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,13 +76,13 @@ class _StorePageState extends State<StorePage> {
                 'Category',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    color: AppColors.whiteColor,
+                    color: AppColors.darkGreyColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          AppConstant.sizer(context: context, h: 0.01, w: 0.0),
+          // AppConstant.sizer(context: context, h: 0.01, w: 0.0),
           SingleChildScrollView(
             padding: EdgeInsets.all(10),
             scrollDirection: Axis.horizontal,
@@ -152,7 +151,7 @@ class _StorePageState extends State<StorePage> {
               ],
             ),
           ),
-          AppConstant.sizer(context: context, h: 0.01, w: 0.0),
+          // AppConstant.sizer(context: context, h: 0.01, w: 0.0),
           Row(
             children: [
               AppConstant.sizer(context: context, h: 0.0, w: 0.03),
@@ -160,7 +159,7 @@ class _StorePageState extends State<StorePage> {
                 'All Products',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    color: AppColors.whiteColor,
+                    color: AppColors.darkGreyColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
@@ -170,10 +169,10 @@ class _StorePageState extends State<StorePage> {
           Expanded(
             child: GridView.count(
               crossAxisCount: 2,
-              childAspectRatio: (itemWidth / itemHeight),
-              padding: EdgeInsets.all(10),
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              childAspectRatio: 0.71,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
               children: List.generate(allproducts.length, (index) {
                 return ProductTile(
                   product: allproducts[index],

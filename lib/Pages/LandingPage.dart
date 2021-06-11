@@ -13,6 +13,7 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Widget body() {
+    //TODO optimize
     User currentUser = firebaseAuth.currentUser;
     if (currentUser != null) {
       return HomePage();

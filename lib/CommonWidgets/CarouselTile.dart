@@ -28,15 +28,16 @@ class CarouselTile extends StatelessWidget {
           ],
         ),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: AppColors.bgWhite,
-            boxShadow: [
-              BoxShadow(
-                  color: AppColors.secondaryColor,
-                  blurRadius: 1,
-                  offset: Offset(0.9, 0.9),
-                  spreadRadius: 0.1)
-            ]),
+          borderRadius: BorderRadius.circular(15),
+          color: AppColors.darkGreyColor,
+          // boxShadow: [
+          //   BoxShadow(
+          //       color: AppColors.blackColor,
+          //       blurRadius: 1,
+          //       offset: Offset(0.9, 0.9),
+          //       spreadRadius: 0.1)
+          // ]
+        ),
       ),
     );
   }

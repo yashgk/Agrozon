@@ -59,7 +59,7 @@ class _OtpValidateState extends State<OtpValidate> {
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
-      border: Border.all(color: AppColors.whiteColor),
+      border: Border.all(color: AppColors.darkSlateGreyColor, width: 4.0),
       borderRadius: BorderRadius.circular(15.0),
     );
   }
@@ -69,7 +69,7 @@ class _OtpValidateState extends State<OtpValidate> {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(20),
-        color: AppColors.bgBlack,
+        color: AppColors.whiteColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -78,25 +78,23 @@ class _OtpValidateState extends State<OtpValidate> {
               AppString.otpLable,
               textAlign: TextAlign.left,
               style: TextStyle(
-                  color: AppColors.secondaryColor,
+                  color: AppColors.darkGreyColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
             ),
             AppConstant.sizer(context: context, h: 0.03, w: 0.0),
             PinPut(
               fieldsCount: 6,
-              textStyle: TextStyle(color: AppColors.whiteColor),
+              textStyle: TextStyle(color: AppColors.darkGreyColor),
               controller: otpController,
               submittedFieldDecoration: BoxDecoration(
-                border: Border.all(color: AppColors.secondaryColor),
+                border: Border.all(color: AppColors.darkGreyColor, width: 4.0),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               selectedFieldDecoration: _pinPutDecoration,
               followingFieldDecoration: _pinPutDecoration.copyWith(
                 borderRadius: BorderRadius.circular(5.0),
-                border: Border.all(
-                  color: AppColors.whiteColor.withOpacity(.5),
-                ),
+                border: Border.all(color: AppColors.darkGreyColor, width: 4.0),
               ),
             ),
             AppConstant.sizer(context: context, h: 0.02, w: 0.0),
@@ -125,14 +123,14 @@ class _OtpValidateState extends State<OtpValidate> {
                 child: Text(
                   AppString.otpSubmitBtnText,
                   style: TextStyle(
-                      color: AppColors.bgBlack,
+                      color: AppColors.whiteColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 16),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: AppColors.secondaryColor,
+                  primary: AppColors.darkGreyColor,
                   elevation: 5.0,
-                  shadowColor: AppColors.secondaryColor,
+                  shadowColor: AppColors.darkGreyColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                 ),

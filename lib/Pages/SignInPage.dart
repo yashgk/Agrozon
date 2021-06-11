@@ -8,10 +8,8 @@ import 'package:agrozon/Core/Prefs.dart';
 import 'package:agrozon/Model/UserModel.dart';
 import 'package:agrozon/Pages/HomePage.dart';
 import 'package:agrozon/Pages/OtpValidate.dart';
-
 import 'package:agrozon/global_variables.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:agrozon/Core/AuthBase.dart';
@@ -52,24 +50,32 @@ class _SignInPageState extends State<SignInPage> {
         padding: EdgeInsets.all(15),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(color: AppColors.bgBlack),
+        decoration: BoxDecoration(color: AppColors.whiteColor),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            AppConstant.sizer(context: context, h: 0.05, w: 0.0),
+            Image.asset(
+              'assets/images/loginbg.png',
+              height: 200,
+              width: 300,
+            ),
+            AppConstant.sizer(context: context, h: 0.05, w: 0.0),
             Container(
-              padding: EdgeInsets.all(10),
+              // padding: EdgeInsets.all(10),
               height: MediaQuery.of(context).size.height * 0.30,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: AppColors.bgWhite,
-                  boxShadow: [
-                    BoxShadow(
-                        color: AppColors.secondaryColor,
-                        offset: Offset(1.0, 1.0),
-                        spreadRadius: 0,
-                        blurRadius: 1),
-                  ]),
+                borderRadius: BorderRadius.circular(12),
+                color: AppColors.whiteColor,
+                // boxShadow: [
+                //   BoxShadow(
+                //       color: AppColors.blackColor,
+                //       offset: Offset(1.0, 1.0),
+                //       spreadRadius: 0,
+                //       blurRadius: 1),
+                // ]
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -77,7 +83,7 @@ class _SignInPageState extends State<SignInPage> {
                     AppString.loginLable,
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: AppColors.secondaryColor,
+                        color: AppColors.darkGreyColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
                   ),
@@ -86,7 +92,7 @@ class _SignInPageState extends State<SignInPage> {
                     AppString.loginMsg,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: AppColors.secondaryColor,
+                      color: AppColors.darkSlateGreyColor,
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
@@ -100,7 +106,7 @@ class _SignInPageState extends State<SignInPage> {
                       maxLength: 10,
                       controller: phoneController,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      cursorColor: AppColors.secondaryColor,
+                      cursorColor: AppColors.darkGreyColor,
                       decoration: InputDecoration(
                         counterText: '',
                         prefixIcon: Padding(
@@ -109,19 +115,19 @@ class _SignInPageState extends State<SignInPage> {
                             ' +91 ',
                             style: TextStyle(
                                 fontSize: 20,
-                                color: AppColors.secondaryColor,
+                                color: AppColors.darkGreyColor,
                                 fontWeight: FontWeight.w700),
                           ),
                         ),
-                        border: textFieldBorder,
-                        disabledBorder: textFieldBorder,
-                        enabledBorder: textFieldBorder,
-                        focusedBorder: textFieldBorder,
+                        border: textFieldEnabledBorder,
+                        disabledBorder: textFieldEnabledBorder,
+                        enabledBorder: textFieldEnabledBorder,
+                        focusedBorder: textFieldEnabledBorder,
                       ),
                       style: TextStyle(
                           letterSpacing: 2.0,
                           fontSize: 20,
-                          color: AppColors.secondaryColor,
+                          color: AppColors.darkGreyColor,
                           fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -144,10 +150,10 @@ class _SignInPageState extends State<SignInPage> {
                           content: Text(
                             'Please Enter Valid Phone Number.',
                             style: TextStyle(
-                                color: AppColors.bgBlack,
+                                color: AppColors.whiteColor,
                                 fontWeight: FontWeight.bold),
                           ),
-                          backgroundColor: AppColors.redColor,
+                          backgroundColor: AppColors.errorColor,
                           duration: Duration(seconds: 2),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -156,14 +162,14 @@ class _SignInPageState extends State<SignInPage> {
                     child: Text(
                       AppString.submitBtn,
                       style: TextStyle(
-                          color: AppColors.bgBlack,
+                          color: AppColors.whiteColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: AppColors.secondaryColor,
-                      elevation: 5.0,
-                      shadowColor: AppColors.secondaryColor,
+                      primary: AppColors.darkGreyColor,
+                      elevation: 0.0,
+                      shadowColor: AppColors.darkGreyColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
@@ -173,9 +179,9 @@ class _SignInPageState extends State<SignInPage> {
             ),
             AppConstant.sizer(context: context, h: 0.03, w: 0.0),
             Text(
-              'Or Sign In with',
+              AppString.loginOption,
               style: TextStyle(
-                  color: AppColors.secondaryColor,
+                  color: AppColors.darkSlateGreyColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16),
             ),
@@ -204,10 +210,10 @@ class _SignInPageState extends State<SignInPage> {
                           content: Text(
                             'Something Went Wrong. Please Try Again.',
                             style: TextStyle(
-                                color: AppColors.bgBlack,
+                                color: AppColors.whiteColor,
                                 fontWeight: FontWeight.bold),
                           ),
-                          backgroundColor: AppColors.redColor,
+                          backgroundColor: AppColors.errorColor,
                           duration: Duration(seconds: 2),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -217,10 +223,10 @@ class _SignInPageState extends State<SignInPage> {
                         content: Text(
                           'Please Connect to the Internet.',
                           style: TextStyle(
-                              color: AppColors.bgBlack,
+                              color: AppColors.whiteColor,
                               fontWeight: FontWeight.bold),
                         ),
-                        backgroundColor: AppColors.yellowColor,
+                        backgroundColor: AppColors.warningColor,
                         duration: Duration(seconds: 2),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -230,14 +236,14 @@ class _SignInPageState extends State<SignInPage> {
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: AppColors.bgWhite,
-                      boxShadow: [
-                        BoxShadow(
-                            color: AppColors.secondaryColor,
-                            offset: Offset(1.0, 1.0),
-                            spreadRadius: 0,
-                            blurRadius: 1),
-                      ],
+                      color: AppColors.darkSlateGreyColor,
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //       color: AppColors.blackColor,
+                      //       offset: Offset(1.0, 1.0),
+                      //       spreadRadius: 0,
+                      //       blurRadius: 1),
+                      // ],
                     ),
                     width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height * 0.1,
@@ -262,10 +268,10 @@ class _SignInPageState extends State<SignInPage> {
                           content: Text(
                             'Something Went Wrong. Please Try Again.',
                             style: TextStyle(
-                                color: AppColors.bgBlack,
+                                color: AppColors.whiteColor,
                                 fontWeight: FontWeight.bold),
                           ),
-                          backgroundColor: AppColors.redColor,
+                          backgroundColor: AppColors.errorColor,
                           duration: Duration(seconds: 2),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -275,10 +281,10 @@ class _SignInPageState extends State<SignInPage> {
                         content: Text(
                           'Please Connect to the Internet.',
                           style: TextStyle(
-                              color: AppColors.bgBlack,
+                              color: AppColors.whiteColor,
                               fontWeight: FontWeight.bold),
                         ),
-                        backgroundColor: AppColors.yellowColor,
+                        backgroundColor: AppColors.warningColor,
                         duration: Duration(seconds: 2),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -288,14 +294,14 @@ class _SignInPageState extends State<SignInPage> {
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: AppColors.bgWhite,
-                      boxShadow: [
-                        BoxShadow(
-                            color: AppColors.secondaryColor,
-                            offset: Offset(1.0, 1.0),
-                            spreadRadius: 0,
-                            blurRadius: 1),
-                      ],
+                      color: AppColors.darkSlateGreyColor,
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //       color: AppColors.blackColor,
+                      //       offset: Offset(1.0, 1.0),
+                      //       spreadRadius: 0,
+                      //       blurRadius: 1),
+                      // ],
                     ),
                     width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height * 0.1,

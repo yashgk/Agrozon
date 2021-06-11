@@ -71,14 +71,15 @@ class _CategorywiseProductListState extends State<CategorywiseProductList> {
       },
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0.0,
           title: Text(
             widget.title,
-            style: TextStyle(color: AppColors.secondaryColor),
+            style: TextStyle(color: AppColors.darkGreyColor),
           ),
           centerTitle: true,
-          backgroundColor: AppColors.bgWhite,
+          backgroundColor: AppColors.whiteColor,
           leading: InkWell(
-            child: Icon(Icons.arrow_back_ios, color: AppColors.secondaryColor),
+            child: Icon(Icons.arrow_back_ios, color: AppColors.darkGreyColor),
             onTap: () {
               Navigator.pop(context);
             },
@@ -89,15 +90,15 @@ class _CategorywiseProductListState extends State<CategorywiseProductList> {
           height: size.height,
           width: size.width,
           decoration: BoxDecoration(
-            color: AppColors.bgBlack,
+            color: AppColors.whiteColor,
           ),
           child: Container(
             child: GridView.count(
               crossAxisCount: 2,
-              childAspectRatio: (itemWidth / itemHeight),
+              childAspectRatio: 0.71,
               padding: EdgeInsets.all(10),
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
               children: List.generate(products.length, (index) {
                 return ProductTile(
                   product: products[index],

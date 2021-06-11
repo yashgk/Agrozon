@@ -5,9 +5,7 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: AppColors.bgBlack
-      ),
+      decoration: BoxDecoration(color: AppColors.whiteColor),
       child: Column(
         children: [],
       ),

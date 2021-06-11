@@ -1,5 +1,4 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
-import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:agrozon/Pages/Screens/StorePage.dart';
 import 'package:agrozon/Pages/Screens/AccountPage.dart';
@@ -15,13 +14,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   List<Widget> screenList;
- 
 
   void initTabs() async {
     setState(() {
       screenList = [
-        StorePage(
-        ),
+        StorePage(),
         OrderPage(),
         FavouritePage(),
         AccountPage(),
@@ -65,10 +62,10 @@ class _HomePageState extends State<HomePage> {
               activeIcon: Icon(Icons.account_circle)),
         ],
         currentIndex: selectedIndex,
-        backgroundColor: AppColors.bgWhite,
+        backgroundColor: AppColors.darkGreyColor,
         showUnselectedLabels: true,
-        selectedItemColor: AppColors.secondaryColor,
-        unselectedItemColor: AppColors.whiteColor,
+        selectedItemColor: AppColors.whiteColor,
+        unselectedItemColor: AppColors.darkSlateGreyColor,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) => onItemTapped(index),
       ),

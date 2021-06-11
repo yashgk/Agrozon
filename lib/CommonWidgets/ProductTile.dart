@@ -34,27 +34,34 @@ class _ProductTileState extends State<ProductTile> {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(8),
-        height: 200,
-        // width: 100,
+        padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            Image.network(
-              widget.product.imageUrl,
-              height: 180,
-              width: 130,
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  child: Image.network(
+                    widget.product.imageUrl,
+                    height: 150,
+                    width: 150,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
             AppConstant.sizer(context: context, h: 0.01, w: 0.0),
             Row(
               children: [
                 Expanded(
                   child: Container(
+                    alignment: Alignment.center,
                     child: Text(
                       widget.product.productName,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          color: AppColors.whiteColor,
+                          color: Colors.grey.shade200,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -64,15 +71,17 @@ class _ProductTileState extends State<ProductTile> {
             AppConstant.sizer(context: context, h: 0.01, w: 0.0),
             Row(
               children: [
+                AppConstant.sizer(context: context, h: 0.0, w: 0.03),
                 SizedBox(
                   width: 90,
                   child: Text(
-                    widget.product.price,
+                    "₹ " + widget.product.price,
                     style: TextStyle(
                         color: AppColors.whiteColor,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
+                Spacer(),
                 Text(
                   widget.product.rating,
                   style: TextStyle(
@@ -85,6 +94,7 @@ class _ProductTileState extends State<ProductTile> {
                     size: 18,
                   ),
                 ),
+                AppConstant.sizer(context: context, h: 0.0, w: 0.03),
               ],
             ),
             AppConstant.sizer(context: context, h: 0.01, w: 0.0),
@@ -109,10 +119,10 @@ class _ProductTileState extends State<ProductTile> {
                       content: Text(
                         snackBarText,
                         style: TextStyle(
-                            color: AppColors.bgBlack,
+                            color: AppColors.whiteColor,
                             fontWeight: FontWeight.bold),
                       ),
-                      backgroundColor: AppColors.secondaryColor,
+                      backgroundColor: AppColors.darkGreyColor,
                       duration: Duration(seconds: 2),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -120,13 +130,13 @@ class _ProductTileState extends State<ProductTile> {
                   },
                   child: Container(
                     padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondaryColor,
-                      shape: BoxShape.circle,
-                    ),
+                    // decoration: BoxDecoration(
+                    //   color: AppColors.blackColor,
+                    //   shape: BoxShape.circle,
+                    // ),
                     child: Icon(
                       isFav ? Icons.favorite : Icons.favorite_outline,
-                      color: AppColors.bgBlack,
+                      color: AppColors.darkSlateGreyColor,
                     ),
                   ),
                 ),
@@ -138,10 +148,10 @@ class _ProductTileState extends State<ProductTile> {
                       content: Text(
                         'Added to Kart.',
                         style: TextStyle(
-                            color: AppColors.bgBlack,
+                            color: AppColors.whiteColor,
                             fontWeight: FontWeight.bold),
                       ),
-                      backgroundColor: AppColors.secondaryColor,
+                      backgroundColor: AppColors.darkGreyColor,
                       duration: Duration(seconds: 2),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -149,12 +159,21 @@ class _ProductTileState extends State<ProductTile> {
                   child: Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: AppColors.secondaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.add_shopping_cart,
-                      color: AppColors.bgBlack,
+                        color: AppColors.darkSlateGreyColor,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.add_shopping_cart,
+                          color: AppColors.darkGreyColor,
+                        ),
+                        Text(
+                          "Add To Kart",
+                          style: TextStyle(
+                              color: AppColors.darkGreyColor,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -163,15 +182,16 @@ class _ProductTileState extends State<ProductTile> {
           ],
         ),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: AppColors.bgWhite,
-            boxShadow: [
-              BoxShadow(
-                  color: AppColors.secondaryColor,
-                  blurRadius: 1,
-                  offset: Offset(0.9, 0.9),
-                  spreadRadius: 0.1)
-            ]),
+          borderRadius: BorderRadius.circular(15),
+          color: AppColors.darkGreyColor,
+          // boxShadow: [
+          //   BoxShadow(
+          //       color: AppColors.blackColor,
+          //       blurRadius: 1,
+          //       offset: Offset(0.9, 0.9),
+          //       spreadRadius: 0.1)
+          // ]
+        ),
       ),
     );
   }

@@ -1,4 +1,6 @@
 import 'package:agrozon/AppConstants/AppColors.dart';
+import 'package:agrozon/AppConstants/AppConstant.dart';
+import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
 import 'package:agrozon/Core/RealtimeDatabase.dart';
 import 'package:agrozon/Model/ProductModel.dart';
 
@@ -16,10 +18,10 @@ class _OrderPageState extends State<OrderPage> {
   List<Product> kartProducts = [];
   List<dynamic> qty = [];
   bool deleteItem = false;
+  bool noItems = false;
+  bool isLoading = false;
   TextStyle textStyle = TextStyle(
-      color: AppColors.secondaryColor,
-      fontWeight: FontWeight.bold,
-      fontSize: 20);
+      color: AppColors.whiteColor, fontWeight: FontWeight.bold, fontSize: 15);
 
   Future<void> getAllProducts() async {
     allproducts = await RealtimeDatabase.getAllProducts();
@@ -41,18 +43,30 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Future<void> finalize() async {
+    setState(() {
+      isLoading = true;
+    });
     await getAllProducts();
     await getKartList();
-    qty = kartMap.values.toList();
-    kartMap.keys.forEach((kartElement) {
-      allproducts.forEach((element) {
-        if (element.productId == kartElement) {
-          kartProducts.add(element);
-        }
-      });
-    });
 
-    setState(() {});
+    if (kartMap == null) {
+      setState(() {
+        noItems = true;
+      });
+    } else {
+      qty = kartMap.values.toList();
+      kartMap.keys.forEach((kartElement) {
+        allproducts.forEach((element) {
+          if (element.productId == kartElement) {
+            kartProducts.add(element);
+          }
+        });
+      });
+      setState(() {});
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -63,130 +77,194 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(color: AppColors.bgBlack),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: kartProducts.length,
-              itemBuilder: (context, index) {
-                return Container(
-                    color: AppColors.bgWhite,
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: [
-                        Image.network(
-                          kartProducts[index].imageUrl,
-                          height: 80,
-                          width: 80,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                kartProducts[index].productName,
-                                style: textStyle,
-                              ),
-                              Text(
-                                "₹ " + kartProducts[index].price,
-                                style: textStyle,
-                              ),
-                              Text(
-                                "Ratings : " + kartProducts[index].rating,
-                                style: textStyle,
-                              )
-                            ],
+    return isLoading
+        ? ProgressDialog(text: "Please Wait...")
+        : noItems
+            ? Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(color: AppColors.whiteColor),
+                child: Center(
+                  child: Text(
+                    "Your Kart is Empty",
+                    style: TextStyle(
+                        color: AppColors.darkGreyColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25),
+                  ),
+                ))
+            : Container(
+                height: MediaQuery.of(context).size.height,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(color: AppColors.whiteColor),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.68,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: kartProducts.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.darkGreyColor,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.network(
+                                            kartProducts[index].imageUrl,
+                                            height: 80,
+                                            width: 80,
+                                          ),
+                                        ),
+                                      ),
+                                      AppConstant.sizer(
+                                          context: context, h: 0.0, w: 0.03),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              kartProducts[index].productName,
+                                              style: textStyle,
+                                            ),
+                                            Text(
+                                              "₹ " + kartProducts[index].price,
+                                              style: textStyle,
+                                            ),
+                                            Text(
+                                              "Ratings : " +
+                                                  kartProducts[index].rating,
+                                              style: textStyle,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            color: AppColors.darkSlateGreyColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  if (int.parse(qty[index]) !=
+                                                      30) {
+                                                    await RealtimeDatabase
+                                                        .addToKart(
+                                                            kartProducts[index]
+                                                                .productId);
+                                                    await getKartList();
+                                                    setState(() {
+                                                      qty = kartMap.values
+                                                          .toList();
+                                                    });
+                                                  }
+                                                },
+                                                child: Icon(
+                                                  Icons.add,
+                                                  color:
+                                                      AppColors.darkGreyColor,
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 35,
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 5),
+                                              child: Text(
+                                                qty[index].toString() ?? "",
+                                                style: TextStyle(
+                                                    color:
+                                                        AppColors.darkGreyColor,
+                                                    fontSize: 20),
+                                              ),
+                                            ),
+                                            Container(
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  if (int.parse(qty[index]) ==
+                                                      1) {
+                                                    await RealtimeDatabase
+                                                        .deleteFromKart(
+                                                            kartProducts[index]
+                                                                .productId);
+                                                    await getKartList();
+                                                    if (kartMap == null) {
+                                                      setState(() {
+                                                        noItems = true;
+                                                      });
+                                                    }
+                                                    kartProducts.removeWhere(
+                                                        (element) =>
+                                                            element.productId ==
+                                                            kartProducts[index]
+                                                                .productId);
+                                                  } else {
+                                                    await RealtimeDatabase
+                                                        .removeFromKart(
+                                                            kartProducts[index]
+                                                                .productId);
+                                                    await getKartList();
+                                                    if (kartMap == null) {
+                                                      setState(() {
+                                                        noItems = true;
+                                                      });
+                                                    }
+                                                    setState(() {
+                                                      qty = kartMap.values
+                                                          .toList();
+                                                    });
+                                                  }
+                                                },
+                                                child: Icon(
+                                                  int.parse(qty[index]) == 1
+                                                      ? Icons.delete
+                                                      : Icons.remove,
+                                                  color:
+                                                      AppColors.darkGreyColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                            );
+                          }),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              primary: AppColors.darkGreyColor),
+                          child: Text(
+                            "Checkout",
+                            style: TextStyle(
+                                color: AppColors.whiteColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: InkWell(
-                                onTap: () async {
-                                  if (int.parse(qty[index]) != 30) {
-                                    await RealtimeDatabase.addToKart(
-                                        kartProducts[index].productId);
-                                    await getKartList();
-
-                                    setState(() {
-                                      qty = kartMap.values.toList();
-                                    });
-                                  }
-                                },
-                                child: Icon(
-                                  Icons.add,
-                                  color: AppColors.secondaryColor,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 35,
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(
-                                qty[index].toString() ?? "",
-                                style: TextStyle(
-                                    color: AppColors.secondaryColor,
-                                    fontSize: 20),
-                              ),
-                            ),
-                            Container(
-                              child: InkWell(
-                                splashColor: AppColors.bgWhite,
-                                onTap: () async {
-                                  if (int.parse(qty[index]) == 1) {
-                                    await RealtimeDatabase.deleteFromKart(
-                                        kartProducts[index].productId);
-                                    await getKartList();
-                                    kartProducts.removeWhere((element) =>
-                                        element.productId ==
-                                        kartProducts[index].productId);
-                                  } else {
-                                    await RealtimeDatabase.removeFromKart(
-                                        kartProducts[index].productId);
-                                  }
-                                  await getKartList();
-                                  setState(() {
-                                    qty = kartMap.values.toList();
-                                  });
-                                },
-                                child: Icon(
-                                  int.parse(qty[index]) == 1
-                                      ? Icons.delete
-                                      : Icons.remove,
-                                  color: AppColors.secondaryColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ));
-              }),
-          Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              width: MediaQuery.of(context).size.width,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(primary: AppColors.bgWhite),
-                child: Text(
-                  "Checkout",
-                  style: TextStyle(
-                      color: AppColors.secondaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                        ))
+                  ],
                 ),
-              ))
-        ],
-      ),
-    );
+              );
   }
 }

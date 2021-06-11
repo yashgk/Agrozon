@@ -44,12 +44,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         title: Text(
           'Profile',
-          style: TextStyle(color: AppColors.secondaryColor),
+          style: TextStyle(color: AppColors.darkGreyColor),
         ),
         centerTitle: true,
-        backgroundColor: AppColors.bgWhite,
+        backgroundColor: AppColors.whiteColor,
         actions: [
           isEditing
               ? Container()
@@ -65,16 +66,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                     child: Icon(
                       Icons.edit,
-                      color: AppColors.secondaryColor,
+                      color: AppColors.darkGreyColor,
                     ),
                   ))
         ],
-        leading: InkWell(
-          child: Icon(Icons.arrow_back_ios, color: AppColors.secondaryColor),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: isEditing
+            ? Container()
+            : InkWell(
+                child:
+                    Icon(Icons.arrow_back_ios, color: AppColors.darkGreyColor),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
       ),
       body: isLoading
           ? ProgressDialog(text: "Please Wait ...")
@@ -83,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
               height: size.height,
               width: size.width,
               decoration: BoxDecoration(
-                color: AppColors.bgBlack,
+                color: AppColors.whiteColor,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -93,7 +97,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     "Full Name",
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: AppColors.secondaryColor, fontSize: 15),
+                        color: AppColors.darkGreyColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -103,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       enabled: isEditing,
                       controller: nameController,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      cursorColor: AppColors.secondaryColor,
+                      cursorColor: AppColors.darkGreyColor,
                       decoration: InputDecoration(
                         counterText: '',
                         border: textFieldBorder,
@@ -113,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       style: TextStyle(
                           fontSize: 20,
-                          color: AppColors.secondaryColor,
+                          color: AppColors.darkGreyColor,
                           fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -122,7 +128,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Phone Number',
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: AppColors.secondaryColor, fontSize: 15),
+                        color: AppColors.darkGreyColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -132,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       enabled: isEditing,
                       controller: mobileController,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      cursorColor: AppColors.secondaryColor,
+                      cursorColor: AppColors.darkGreyColor,
                       decoration: InputDecoration(
                         prefixIcon: Padding(
                           padding: EdgeInsets.fromLTRB(10, 11, 0, 0),
@@ -140,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ' +91 ',
                             style: TextStyle(
                                 fontSize: 20,
-                                color: AppColors.secondaryColor,
+                                color: AppColors.darkGreyColor,
                                 fontWeight: FontWeight.w700),
                           ),
                         ),
@@ -152,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       style: TextStyle(
                           fontSize: 20,
-                          color: AppColors.secondaryColor,
+                          color: AppColors.darkGreyColor,
                           fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -161,7 +169,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     "E-mail",
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: AppColors.secondaryColor, fontSize: 15),
+                        color: AppColors.darkGreyColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -171,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       enabled: isEditing,
                       controller: emailController,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      cursorColor: AppColors.secondaryColor,
+                      cursorColor: AppColors.darkGreyColor,
                       decoration: InputDecoration(
                         counterText: '',
                         border: textFieldBorder,
@@ -181,37 +191,35 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       style: TextStyle(
                           fontSize: 20,
-                          color: AppColors.secondaryColor,
+                          color: AppColors.darkGreyColor,
                           fontWeight: FontWeight.w700),
                     ),
                   ),
                   AppConstant.sizer(context: context, h: 0.03, w: 0.0),
                   isEditing
-                      ? Container()
-                      : ElevatedButton(
+                      ? ElevatedButton(
                           onPressed: () {
                             setState(() {
                               if (isEditing) {
-                                isEditing = true;
+                                isEditing = false;
                               }
-                              //TODO implement profile section
                             });
                           },
                           child: Text(
                             'Save',
                             style: TextStyle(
-                                color: AppColors.bgBlack,
+                                color: AppColors.whiteColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16),
                           ),
                           style: ElevatedButton.styleFrom(
-                            primary: AppColors.secondaryColor,
-                            elevation: 5.0,
-                            shadowColor: AppColors.secondaryColor,
+                            primary: AppColors.darkGreyColor,
+                            shadowColor: AppColors.blackColor,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12)),
                           ),
                         )
+                      : Container()
                 ],
               ),
             ),

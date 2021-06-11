@@ -22,21 +22,22 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
     isFav = widget.product.isFavourite;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bgWhite,
+        elevation: 0.0,
+        backgroundColor: AppColors.whiteColor,
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
             Icons.arrow_back_ios,
-            color: AppColors.secondaryColor,
+            color: AppColors.darkGreyColor,
           ),
         ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        decoration: BoxDecoration(color: AppColors.bgBlack),
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(color: AppColors.whiteColor),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -48,12 +49,14 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.secondaryColor),
+                        color: AppColors.darkGreyColor),
                   ),
                 ],
               ),
               AppConstant.sizer(context: context, h: 0.02, w: 0.0),
               Container(
+                height: 400,
+                padding: EdgeInsets.all(10),
                 child: Image.network(
                   widget.product.imageUrl,
                 ),
@@ -64,92 +67,120 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                   Text(
                     "₹ ",
                     style: TextStyle(
-                        color: AppColors.secondaryColor, fontSize: 15),
+                        color: AppColors.darkGreyColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
                   ),
                   Text(widget.product.price,
                       style: TextStyle(
-                          color: AppColors.secondaryColor, fontSize: 20)),
-                  AppConstant.sizer(context: context, h: 0.0, w: 0.7),
+                          color: AppColors.darkGreyColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                  Spacer(),
                   Text(
                     widget.product.rating,
                     style: TextStyle(
-                        color: AppColors.secondaryColor, fontSize: 20),
+                        color: AppColors.darkGreyColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
                   ),
                   AppConstant.sizer(context: context, h: 0.0, w: 0.02),
                   Icon(
                     Icons.star,
                     color: Colors.amber,
-                    size: 15,
-                  )
+                    size: 20,
+                  ),
+                  AppConstant.sizer(context: context, h: 0.0, w: 0.02),
                 ],
               ),
               AppConstant.sizer(context: context, h: 0.02, w: 0.0),
-              Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () async {
-                      if (isFav) {
-                        isFav = widget.product.isFavourite =
-                            await RealtimeDatabase.removeFavfromdb(
-                                productName: widget.product.productName);
-                        snackBarText = "Removed from Favourites";
-                      } else {
-                        isFav = widget.product.isFavourite =
-                            await RealtimeDatabase.addFavtodb(
-                                product: widget.product);
-                        snackBarText = "Added to Favourites";
-                      }
-                      setState(() {});
-                      snackBar = SnackBar(
-                        content: Text(
-                          snackBarText,
-                          style: TextStyle(
-                              color: AppColors.bgBlack,
-                              fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Container(
+                      width: (MediaQuery.of(context).size.width / 2) - 20,
+                      decoration: BoxDecoration(
+                        color: AppColors.darkGreyColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.all(5),
+                      child: InkWell(
+                        onTap: () async {
+                          if (isFav) {
+                            isFav = widget.product.isFavourite =
+                                await RealtimeDatabase.removeFavfromdb(
+                                    productName: widget.product.productName);
+                            snackBarText = "Removed from Favourites";
+                          } else {
+                            isFav = widget.product.isFavourite =
+                                await RealtimeDatabase.addFavtodb(
+                                    product: widget.product);
+                            snackBarText = "Added to Favourites";
+                          }
+                          setState(() {});
+                          snackBar = SnackBar(
+                            content: Text(
+                              snackBarText,
+                              style: TextStyle(
+                                  color: AppColors.whiteColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            backgroundColor: AppColors.blackColor,
+                            duration: Duration(seconds: 2),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            isFav
+                                ? Icon(
+                                    Icons.favorite_rounded,
+                                    color: AppColors.whiteColor,
+                                  )
+                                : Icon(
+                                    Icons.favorite_outline,
+                                    color: AppColors.whiteColor,
+                                  ),
+                            Text(
+                              isFav
+                                  ? "Remove from Favourites"
+                                  : "Add To Favourites",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.whiteColor),
+                            )
+                          ],
                         ),
-                        backgroundColor: AppColors.secondaryColor,
-                        duration: Duration(seconds: 2),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        isFav
-                            ? Icon(Icons.favorite_rounded)
-                            : Icon(Icons.favorite_outline),
-                        Text(
-                          isFav
-                              ? "Remove from Favourites"
-                              : "Add To Favourites",
-                          style: TextStyle(fontSize: 15),
-                        )
-                      ],
-                    ),
-                  )),
-              AppConstant.sizer(context: context, h: 0.02, w: 0.0),
-              Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.shopping_cart),
-                        Text(
-                          "Add To Cart",
-                          style: TextStyle(fontSize: 15),
+                      )),
+                  Spacer(),
+                  Container(
+                      width: (MediaQuery.of(context).size.width / 2) - 20,
+                      decoration: BoxDecoration(
+                        color: AppColors.darkGreyColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.all(5),
+                      child: InkWell(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.shopping_cart,
+                              color: AppColors.whiteColor,
+                            ),
+                            Text(
+                              "Add To Cart",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.whiteColor),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )),
+                      )),
+                ],
+              ),
               AppConstant.sizer(context: context, h: 0.02, w: 0.0),
               Row(
                 children: [
@@ -157,7 +188,7 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                     "Description",
                     style: TextStyle(
                         fontSize: 20,
-                        color: AppColors.secondaryColor,
+                        color: AppColors.darkGreyColor,
                         fontWeight: FontWeight.bold),
                   )
                 ],
@@ -170,7 +201,7 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                   widget.product.productDesc,
                   textAlign: TextAlign.left,
                   style:
-                      TextStyle(color: AppColors.secondaryColor, fontSize: 20),
+                      TextStyle(color: AppColors.darkGreyColor, fontSize: 20),
                 ),
               )),
             ],

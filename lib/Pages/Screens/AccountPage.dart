@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:agrozon/AppConstants/AppColors.dart';
 import 'package:agrozon/AppConstants/AppConstant.dart';
 import 'package:agrozon/CommonWidgets/ProgressDialog.dart';
@@ -8,6 +10,7 @@ import 'package:agrozon/Pages/LandingPage.dart';
 import 'package:agrozon/Pages/Screens/ProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:agrozon/CommonWidgets/CustomListTile.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AccountPage extends StatefulWidget {
   @override
@@ -16,6 +19,7 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   AppUser user;
+  File profileImage;
   bool isLoading = false;
   @override
   void initState() {
@@ -41,7 +45,7 @@ class _AccountPageState extends State<AccountPage> {
             padding: EdgeInsets.all(10),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(color: AppColors.bgBlack),
+            decoration: BoxDecoration(color: AppColors.whiteColor),
             child: Column(
               children: [
                 Container(
@@ -55,7 +59,7 @@ class _AccountPageState extends State<AccountPage> {
                         clipBehavior: Clip.none,
                         children: [
                           CircleAvatar(
-                            radius: 60,
+                            radius: 70,
                             backgroundImage: AssetImage(
                               'assets/images/plant.png',
                             ),
@@ -83,7 +87,7 @@ class _AccountPageState extends State<AccountPage> {
                             user.fullName ?? "",
                             style: TextStyle(
                                 fontSize: 25,
-                                color: AppColors.secondaryColor,
+                                color: AppColors.darkGreyColor,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -102,36 +106,66 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 AppConstant.sizer(context: context, w: 0.0, h: 0.01),
                 CustomListTile(
+                  leading: Icons.contact_mail_outlined,
+                  title: 'Addresses',
+                  onListItemTap: () {},
+                ),
+                AppConstant.sizer(context: context, w: 0.0, h: 0.01),
+                CustomListTile(
+                  leading: Icons.shopping_bag_outlined,
+                  title: 'Orders',
+                  onListItemTap: () {},
+                ),
+                AppConstant.sizer(context: context, w: 0.0, h: 0.01),
+                CustomListTile(
+                  leading: Icons.monetization_on_outlined,
+                  title: 'Bank Details and Card Details',
+                  onListItemTap: () {},
+                ),
+                AppConstant.sizer(context: context, w: 0.0, h: 0.01),
+                CustomListTile(
                   leading: Icons.settings_outlined,
                   title: 'Settings',
                   onListItemTap: () {},
                 ),
                 AppConstant.sizer(context: context, w: 0.0, h: 0.01),
-                ListTile(
-                  tileColor: AppColors.bgWhite,
-                  leading: Icon(
-                    Icons.logout,
-                    color: AppColors.secondaryColor,
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: AppColors.darkGreyColor,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: InkWell(
+                    onTap: () async {
+                      bool canLogout = await Auth.signOut();
+                      if (canLogout) {
+                        Prefs.logOut();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LandingPage()),
+                            (route) => false);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Icon(
+                          Icons.logout,
+                          color: AppColors.errorColor,
+                        ),
+                        AppConstant.sizer(context: context, w: 0.05, h: 0.0),
+                        Text(
+                          'Log Out',
+                          style: TextStyle(
+                              color: AppColors.errorColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
                   ),
-                  title: Text(
-                    'Log Out',
-                    style: TextStyle(
-                        color: AppColors.secondaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                  ),
-                  onTap: () async {
-                    bool canLogout = await Auth.signOut();
-                    if (canLogout) {
-                      Prefs.logOut();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LandingPage()),
-                          (route) => false);
-                    }
-                  },
-                )
+                ),
               ],
             ),
           );

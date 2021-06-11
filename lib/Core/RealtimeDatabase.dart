@@ -85,6 +85,8 @@ class RealtimeDatabase {
   static Future<void> addUserData(AppUser appuser) async {
     await getUser();
     DatabaseReference dbref;
+    print('this is user id');
+    print(appuser.uid);
     dbref = FirebaseDatabase.instance.reference().child('users/${appuser.uid}');
     Map<String, dynamic> usermap = {
       'username': appuser.fullName,
@@ -175,6 +177,7 @@ class RealtimeDatabase {
 
     Map<dynamic, dynamic> kart = {};
     List<dynamic> kartProdList = [];
+    Map<String, dynamic> initialKart = {};
     kartRef = FirebaseDatabase.instance
         .reference()
         .child('users')
@@ -183,7 +186,12 @@ class RealtimeDatabase {
     await kartRef.once().then((DataSnapshot snapshot) {
       if (snapshot != null) {
         kart = snapshot.value;
-        kartProdList = kart.keys.toList();
+        if (kart != null) {
+          kartProdList = kart.keys.toList();
+        } else {
+          initialKart = {'$productid': "1"};
+          kartRef.update(initialKart);
+        }
       }
     });
     int len = 0;
